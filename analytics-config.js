@@ -7,6 +7,6 @@
  */
 window.SITE_ANALYTICS = {
   site: "imi",
-  ga4MeasurementId: "", // e.g. "G-XXXXXXXXXX"
+  ga4MeasurementId: "G-6M05VV50HJ",
   anonymizeIp: true,
 };
