@@ -1,13 +1,27 @@
-/** Seed archive — replace/extend with real Spaces ingest later */
+/**
+ * IMI archive — real Spaces first (father's idea: trusted human moments).
+ * Live Space URL is the point — not only seed blurbs.
+ */
 window.IMI_ARCHIVE = [
   {
+    id: "s-20260725-myspace-live",
+    title: "MYSPACE — live Space (thePuzzler)",
+    date: "2026-07-25",
+    tags: ["myspace", "live", "peace", "spaces", "jesus", "presence", "featured"],
+    blurb:
+      "Real X Space — chill presence, God stuff, guests first, host speaks last. This is the IMI idea in the wild: a meeting of the mind you can open as it happened, not a rewritten summary.",
+    source: "https://x.com/i/spaces/1nGeLLdlnrRKX?s=20",
+    kind: "Live Space",
+    featured: true,
+  },
+  {
     id: "s-20260724-myspace",
-    title: "MYSPACE — peace & presence Space",
+    title: "MYSPACE — host posture (copyright 20260724)",
     date: "2026-07-24",
-    tags: ["peace", "spaces", "jesus", "presence", "myspace"],
-    blurb: "Host template: chill presence, God stuff, speak last. Copyright title 20260724.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Space template",
+    tags: ["peace", "spaces", "jesus", "presence", "myspace", "template"],
+    blurb: "Same spirit as the live Space: chill, speak last. Opener frozen 20260724. Open the live Space card above for the real room.",
+    source: "https://x.com/i/spaces/1nGeLLdlnrRKX?s=20",
+    kind: "Space note",
   },
   {
     id: "s-20260724-ledger",
