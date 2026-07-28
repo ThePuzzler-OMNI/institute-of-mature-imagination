@@ -6,6 +6,19 @@
   const year = document.getElementById("y");
   if (year) year.textContent = String(new Date().getFullYear());
 
+  /** Hero “Featured Space” card — SSOT is archive-data.js item with featured:true */
+  function paintLiveHero() {
+    const el = document.getElementById("live-space");
+    if (!el) return;
+    const feat = data.find((x) => x && x.featured && x.source) || data.find((x) => /spaces/i.test(x.source || ""));
+    if (!feat) return;
+    el.href = feat.source;
+    const titleEl = el.querySelector("[data-live-title]");
+    const blurbEl = el.querySelector("[data-live-blurb]");
+    if (titleEl) titleEl.textContent = feat.title || "Featured Space";
+    if (blurbEl) blurbEl.textContent = feat.blurb || "Open the real room on X.";
+  }
+
   function card(item) {
     const tags = (item.tags || [])
       .map((t) => `<span class="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/50">${t}</span>`)
@@ -57,5 +70,6 @@
   if (input) {
     input.addEventListener("input", () => render(filter(input.value)));
   }
+  paintLiveHero();
   render(data);
 })();
