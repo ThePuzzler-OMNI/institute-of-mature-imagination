@@ -31,3 +31,14 @@ npx --yes serve .
 5. GoDaddy DNS: CNAME/A records Vercel shows  
 
 Build Grok does **not** have your Vercel password; empty Vercel + “connected to Grok” ≠ file push.
+
+## Grok web cook (preferred for public HTML)
+
+| Item | Value |
+|------|--------|
+| GitHub | `ThePuzzler-OMNI/institute-of-mature-imagination` |
+| Deploy | Vercel ← push `main` |
+| Steward UI | One Mission Cmd Cntr → **Sites** → IMI card → Copy prompt |
+| Rule | Public files only · no secrets · **this site only** in that chat |
+
+See workspace `docs/SITES_GROK_WEB_COOK.md`.
