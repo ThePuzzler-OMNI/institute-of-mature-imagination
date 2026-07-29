@@ -1,1 +1,266 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Institute of Mature Imagination · IMI</title>
+  <meta name="description" content="A trusted archive of real X Spaces and conversations of the mind — searchable, indexable, and honest. Father's idea. Stewarded for the public record." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://instituteofmatureimagination.org/" />
+  <meta property="og:title" content="Institute of Mature Imagination" />
+  <meta property="og:description" content="Organized repository of recorded and live X Spaces. Talk out loud. Find the moment. Trust the record." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://instituteofmatureimagination.org/" />
+  <script src="analytics-config.js"></script>
+  <script src="analytics.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#07060f',
+            nebula: '#1a1040',
+            star: '#e8e4ff',
+            accent: '#8b5cf6',
+            glow: '#22d3ee',
+          },
+          fontFamily: {
+            display: ['\"Segoe UI\"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(139, 92, 246, 0.25), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(34, 211, 238, 0.12), transparent 50%),
+        #07060f;
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+    .search-glow:focus-within {
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.6), 0 0 40px rgba(139, 92, 246, 0.2);
+    }
+    .card-hover:hover {
+      border-color: rgba(139, 92, 246, 0.45);
+      transform: translateY(-2px);
+    }
+    .card-hover { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+    .pulse-dot { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .invite-card {
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.22) 0%, rgba(26, 16, 64, 0.85) 42%, rgba(7, 6, 15, 0.95) 100%);
+      border: 1px solid rgba(167, 139, 250, 0.55);
+      box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12) inset, 0 0 60px rgba(139, 92, 246, 0.28), 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+    .invite-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 100% 0%, rgba(34, 211, 238, 0.18), transparent 55%), radial-gradient(ellipse 50% 60% at 0% 100%, rgba(139, 92, 246, 0.2), transparent 50%);
+      pointer-events: none;
+    }
+    .invite-card > * { position: relative; z-index: 1; }
+    .invite-card:hover {
+      border-color: rgba(34, 211, 238, 0.65);
+      box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18) inset, 0 0 70px rgba(139, 92, 246, 0.35), 0 24px 56px rgba(0, 0, 0, 0.5);
+    }
+    .invite-cta {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+      padding: 0.65rem 1.25rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 600;
+      text-decoration: none; transition: filter 0.15s ease, background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .invite-cta-primary {
+      color: #07060f; background: linear-gradient(90deg, #a78bfa, #22d3ee); box-shadow: 0 4px 24px rgba(139, 92, 246, 0.45);
+    }
+    .invite-cta-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .invite-cta-secondary {
+      color: #e8e4ff; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .invite-cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.1); border-color: rgba(34, 211, 238, 0.45); color: #22d3ee;
+    }
+  </style>
+</head>
+<body class="font-display text-star antialiased">
+  <header class="sticky top-0 z-40 glass">
+    <div class="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-accent to-glow flex items-center justify-center font-bold text-void text-sm shrink-0">IMI</div>
+        <div class="min-w-0">
+          <div class="font-semibold tracking-tight truncate">Institute of Mature Imagination</div>
+          <div class="text-[11px] text-white/45 tracking-wide">Record · Search · Trust</div>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-5 text-sm text-white/70">
+        <a href="#archive" class="hover:text-white">Archive</a>
+        <a href="/videos" class="hover:text-white">OMNI Videos</a>
+        <a href="#how" class="hover:text-white">How it works</a>
+        <a href="#trust" class="hover:text-white">Trust record</a>
+        <a href="#network" class="hover:text-white">Network</a>
+      </nav>
+      <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener" class="text-xs md:text-sm px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/10">@omni_puzzler</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="max-w-6xl mx-auto px-5 pt-16 pb-12 md:pt-24 md:pb-16">
+      <p class="text-glow/90 text-xs uppercase tracking-[0.2em] mb-4">In memory of a father's idea · stewarded for the public</p>
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight leading-[1.1] max-w-3xl">
+        Meetings of the mind,<br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-star to-glow">exactly as they happened.</span>
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-white/65 max-w-2xl leading-relaxed">
+        IMI is an organized repository of recorded and live <strong class="text-white/90">X Spaces</strong> —
+        blurb-indexable like AI TV. Talk out loud. What comes back is a real human moment you can trust,
+        not a rewritten summary.
+      </p>
+
+      <div id="archive" class="mt-10 glass rounded-2xl p-2 search-glow max-w-3xl">
+        <label class="sr-only" for="q">Search the archive</label>
+        <div class="flex items-center gap-3 px-3 py-2">
+          <svg class="w-5 h-5 text-white/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z"/>
+          </svg>
+          <input id="q" type="search" autocomplete="off" placeholder="Ask out loud in text… e.g. peace, physics, gardens, launch, family"
+            class="w-full bg-transparent outline-none text-base placeholder:text-white/30 py-2" />
+        </div>
+      </div>
+      <p class="mt-3 text-sm text-white/40">Search the archive — real Spaces first, then notes. More ingest over time.</p>
+
+      <div id="invite-strip" class="mt-10 max-w-3xl"></div>
+
+      <a id="live-space" href="https://x.com/i/spaces" target="_blank" rel="noopener"
+         class="mt-8 max-w-3xl flex flex-col sm:flex-row sm:items-center gap-4 glass rounded-2xl p-5 border border-accent/40 hover:border-glow/50 card-hover group">
+        <div class="flex items-center gap-3 shrink-0">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-400"></span>
+          </span>
+          <span class="text-[11px] uppercase tracking-widest text-emerald-300/90 font-semibold">Featured Space</span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="font-semibold text-white group-hover:text-glow transition-colors" data-live-title>Loading featured…</div>
+          <p class="text-sm text-white/55 mt-0.5" data-live-blurb>Real room on X when steward features a live Space URL.</p>
+        </div>
+        <span class="text-sm font-medium text-accent shrink-0">Open on X →</span>
+      </a>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-5 pb-16">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <h2 class="text-xl font-semibold">Featured moments</h2>
+        <span class="text-xs text-white/40 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+          Live Space + archive · v0.2
+        </span>
+      </div>
+      <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <p id="empty" class="hidden text-white/50 mt-6">No moments match that query yet. Try “peace”, “spaces”, or “mission”.</p>
+    </section>
+
+    <section id="how" class="border-t border-white/10 bg-black/20">
+      <div class="max-w-6xl mx-auto px-5 py-16">
+        <h2 class="text-2xl font-semibold mb-8">How it works</h2>
+        <div class="grid md:grid-cols-4 gap-4">
+          <div class="glass rounded-2xl p-5">
+            <div class="text-accent text-sm font-semibold mb-2">01 · Host</div>
+            <p class="text-sm text-white/65 leading-relaxed">Real people host X Spaces. Presence over performance.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <div class="text-accent text-sm font-semibold mb-2">02 · Record</div>
+            <p class="text-sm text-white/65 leading-relaxed">Capture the full audio/video as it happened — no quiet rewrite.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <div class="text-accent text-sm font-semibold mb-2">03 · Index</div>
+            <p class="text-sm text-white/65 leading-relaxed">Blurbs, topics, timestamps — searchable like AI TV chapters.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <div class="text-accent text-sm font-semibold mb-2">04 · Surface</div>
+            <p class="text-sm text-white/65 leading-relaxed">Query in plain language. Land on the exact human exchange.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trust" class="max-w-6xl mx-auto px-5 py-16">
+      <div class="glass rounded-3xl p-8 md:p-10">
+        <h2 class="text-2xl font-semibold mb-3">X as a record of truth</h2>
+        <p class="text-white/65 max-w-3xl leading-relaxed mb-6">
+          Public posts and Spaces from <a class="text-glow hover:underline" href="https://x.com/omni_puzzler" target="_blank" rel="noopener">@omni_puzzler</a>
+          are part of the trust layer: what was said, when, and in context — including Grok replies when they are part of the thread.
+          This site is the durable home for that archive. Online chat is not enough; the record lives here.
+        </p>
+        <ul class="text-sm text-white/55 space-y-2 list-disc list-inside">
+          <li>Commands and compliance also land in One Mission Notion + workspace ledgers.</li>
+          <li>Sister membership: <strong class="text-white/80">One Mission</strong> · <strong class="text-white/80">IMI</strong> · <strong class="text-white/80">Intek Space</strong>.</li>
+          <li>Outside that circle is not “enemy” — it is simply outside the shared singularity of record.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="network" class="border-t border-white/10">
+      <div class="max-w-6xl mx-auto px-5 py-16">
+        <h2 class="text-2xl font-semibold mb-6">Sister sites</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="https://onemissionnetworkandinstitute.org/?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=network" class="glass card-hover rounded-2xl p-6 block">
+            <div class="text-xs uppercase tracking-wider text-white/40 mb-2">Mission</div>
+            <div class="font-semibold text-lg">One Mission Network</div>
+            <p class="text-sm text-white/55 mt-2">Frameworks, Court, gardens, HOG, community apps.</p>
+          </a>
+          <a href="https://intekspace.com/?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=network" class="glass card-hover rounded-2xl p-6 block">
+            <div class="text-xs uppercase tracking-wider text-white/40 mb-2">Production</div>
+            <div class="font-semibold text-lg">Intek Space</div>
+            <p class="text-sm text-white/55 mt-2">Engineering under a philosophy of life · intekspace.com</p>
+          </a>
+          <a href="https://intekspace.com/store?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=network_store" class="glass card-hover rounded-2xl p-6 block">
+            <div class="text-xs uppercase tracking-wider text-white/40 mb-2">Commerce</div>
+            <div class="font-semibold text-lg">OMNI Store</div>
+            <p class="text-sm text-white/55 mt-2">Tools & goods for practice — hosted by Intek Space.</p>
+          </a>
+          <a href="/videos" class="glass card-hover rounded-2xl p-6 block border border-accent/25">
+            <div class="text-xs uppercase tracking-wider text-glow/80 mb-2">Record</div>
+            <div class="font-semibold text-lg">OMNI Videos</div>
+            <p class="text-sm text-white/55 mt-2">YouTube & mission footage — archived here.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 py-8">
+    <div class="max-w-6xl mx-auto px-5 space-y-4 text-sm text-white/40">
+      <div class="flex flex-col md:flex-row gap-3 justify-between">
+        <div>© <span id="y"></span> Institute of Mature Imagination · instituteofmatureimagination.org</div>
+        <div>Also: .com · <a class="hover:text-white/70" href="/videos">OMNI Videos</a> · <a class="hover:text-white/70" href="https://intekspace.com/store?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=footer">OMNI Store</a></div>
+      </div>
+      <p id="privacy" class="text-xs text-white/35 leading-relaxed max-w-3xl">
+        <strong class="text-white/50 font-medium">Privacy & analytics.</strong>
+        This site uses <strong class="text-white/45">Google Analytics 4</strong> (measurement ID on this property)
+        to understand traffic: pages viewed, approximate location/device, and how people arrive (for example from X).
+        We do not use this tag to collect names, emails, or phone numbers from forms.
+        Google may process data per
+        <a class="text-glow/80 underline hover:text-glow" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s Privacy Policy</a>
+        and its analytics terms. For site questions:
+        <a class="text-glow/80 underline hover:text-glow" href="https://x.com/omni_puzzler" target="_blank" rel="noopener">@omni_puzzler</a>.
+        Sister sites: One Mission · Intek Space (separate analytics properties).
+      </p>
+    </div>
+  </footer>
+
+  <script src="archive-data.js"></script>
+  <script src="app.js"></script>
+  <script src="js/site-config.js"></script>
+  <script src="js/feedback-widget.js" defer></script>
+</body>
+</html>
