@@ -4,6 +4,18 @@
  */
 window.IMI_ARCHIVE = [
   {
+    id: "s-20260727-space-titles",
+    title: "Space titles & descriptions — request a room",
+    date: "2026-07-27",
+    tags: ["spaces", "titles", "request", "myspace", "host", "menu"],
+    blurb:
+      "Want a real Space, not a vague “someday”? Open thePuzzler’s living catalog of Space titles and descriptions — DM a number to request the room. Chill presence, guests speak first, host last. The menu is on X; the archive keeps the invite findable.",
+    source: "https://x.com/omni_puzzler/status/2081550590174233015?s=20",
+    kind: "X Article",
+    pin: true,
+  },
+
+  {
     id: "s-20260725-myspace-live",
     title: "MYSPACE — live Space (thePuzzler)",
     date: "2026-07-25",
