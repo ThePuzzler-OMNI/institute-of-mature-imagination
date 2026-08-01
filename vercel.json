@@ -5,6 +5,10 @@
     {
       "source": "/videos",
       "destination": "/videos.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
     }
   ],
   "headers": [
