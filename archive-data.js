@@ -14,9 +14,37 @@
  *   - Every card: real …/status/… or …/i/spaces/… URL (never bare profile).
  *   - Editorial: Mission / poetic / unique — not vanity metrics.
  *
+ * AUTHOR / AVATAR (multi-user ready):
+ *   - handle, displayName, avatar  OR  author: { handle, name, avatar }
+ *   - If omitted, handle is parsed from source URL (x.com/{handle}/status/…)
+ *   - Avatar defaults to unavatar.io/twitter/{handle}; override with avatar URL
+ *     when pull script has pbs.twimg.com profile images.
+ *
+ * SHELVES (UI tabs):
+ *   - Featured: featured:true OR tags include "best"  (shop window)
+ *   - Articles: format:"article" OR kind/tags article*  (long-form trail)
+ *   - Full library (future): separate paginated store — not this shortlist file
+ *
+ * TRAFFIC SCOPE (meta.trafficScope):
+ *   - steward_only (now): all CTAs → @omni_puzzler until multi-member publish
+ *   - members (later): cards use each author's handle/avatar from row
+ *
+ * REFRESH Featured criteria:
+ *   Re-pull X (or member feed) → re-score → update this file → bump meta.refreshedAt
+ *   No live “best algorithm” in browser yet — steward/Build refresh the shortlist.
+ *
  * LATER: full archive import when steward’s external archive files arrive;
  *   then automate thePuzzler + mission members (architecture first).
  */
+window.IMI_ARCHIVE_META = {
+  trafficScope: "steward_only", // → "members" when multi-author shelf ships
+  stewardHandle: "omni_puzzler",
+  stewardDisplayName: "thePuzzler",
+  refreshedAt: "2026-08-01",
+  pageSizeHint: 6,
+  note: "Ride thePuzzler's best — static shortlist is the product shelf for every visitor (not personalized re-rank).",
+};
+
 window.IMI_ARCHIVE = [
   /* —— Pin: invitation —— */
   {
@@ -164,17 +192,19 @@ window.IMI_ARCHIVE = [
       "Long-form sitting with an image all week: light doesn’t just travel — it flows. Article-style mission physics.",
     source: "https://x.com/omni_puzzler/status/2054140712959037663",
     kind: "Article-style",
+    format: "article",
     featured: true,
   },
   {
     id: "post-no-particles",
     title: "Come follow me — check out my articles",
     date: "2026-07-16",
-    tags: ["physics", "articles", "journey", "best"],
+    tags: ["physics", "articles", "journey", "best", "article"],
     blurb:
       "Human journey invitation: articles arguing there are no particles — only massive energy patterns. Entry to the long-form trail.",
     source: "https://x.com/omni_puzzler/status/2077833473620897960",
     kind: "Articles pointer",
+    format: "article",
   },
   {
     id: "post-kids-wanted",

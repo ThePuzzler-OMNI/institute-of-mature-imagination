@@ -53,6 +53,155 @@
       transform: translateY(-2px);
     }
     .card-hover { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+
+    /* X-like moment cards (posts + Spaces) — recognizable as X content */
+    .x-card {
+      background: #000;
+      border: 1px solid #2f3336;
+      border-radius: 16px;
+      padding: 12px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .x-card:hover {
+      background: #080808;
+      border-color: #3e4144;
+    }
+    .x-card.x-card--featured {
+      border-color: #536471;
+      box-shadow: 0 0 0 1px rgba(29, 155, 240, 0.15);
+    }
+    .x-card.x-card--space {
+      border-color: #7c3aed55;
+      background: linear-gradient(165deg, #0a0614 0%, #000 55%);
+    }
+    .x-card__row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .x-card__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #1d9bf0, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .x-card__avatar-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 9999px;
+      z-index: 1;
+      background: #16181c;
+    }
+    .x-card__avatar-img.is-failed {
+      display: none;
+    }
+    .x-card__avatar-fallback {
+      position: relative;
+      z-index: 0;
+      line-height: 1;
+      user-select: none;
+    }
+    .x-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 6px;
+      line-height: 1.25;
+      min-width: 0;
+    }
+    .x-card__name {
+      font-weight: 700;
+      font-size: 15px;
+      color: #e7e9ea;
+    }
+    .x-card__handle,
+    .x-card__dot,
+    .x-card__time {
+      font-size: 14px;
+      color: #71767b;
+    }
+    .x-card__badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #1d9bf0;
+      border: 1px solid #1d9bf055;
+      border-radius: 9999px;
+      padding: 1px 8px;
+      margin-left: auto;
+    }
+    .x-card__badge--live {
+      color: #f91880;
+      border-color: #f9188055;
+    }
+    .x-card__body {
+      margin: 4px 0 0 52px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: #e7e9ea;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .x-card__body-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .x-card__body-blurb {
+      color: #e7e9ea;
+      opacity: 0.95;
+    }
+    .x-card__footer {
+      margin: 12px 0 0 52px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #71767b;
+    }
+    .x-card__cta {
+      color: #1d9bf0;
+      font-weight: 600;
+    }
+    .x-card:hover .x-card__cta { text-decoration: underline; }
+    .x-card__xmark {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+    #results.x-moments-grid {
+      grid-template-columns: 1fr;
+      max-width: 40rem;
+    }
+    @media (min-width: 768px) {
+      #results.x-moments-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: none;
+      }
+    }
+    @media (min-width: 1024px) {
+      #results.x-moments-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
     .pulse-dot { animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
@@ -144,6 +293,7 @@
         <a href="/about" class="hover:text-white">About</a>
         <a href="#archive" class="hover:text-white">Archive</a>
         <a href="/videos" class="hover:text-white">OMNI Videos</a>
+        <a href="https://onemissionnetworkandinstitute.org/vision-load?site=imi" class="hover:text-white text-glow/90">Vision</a>
         <a href="#how" class="hover:text-white">How it works</a>
         <a href="#trust" class="hover:text-white">Trust record</a>
         <a href="#network" class="hover:text-white">Network</a>
@@ -159,6 +309,7 @@
       <a href="/about">About</a>
       <a href="#archive">Archive</a>
       <a href="/videos">OMNI Videos</a>
+      <a href="https://onemissionnetworkandinstitute.org/vision-load?site=imi">Vision · podcast &amp; chatroom assist</a>
       <a href="#how">How it works</a>
       <a href="#trust">Trust record</a>
       <a href="#network">Network</a>
@@ -210,16 +361,54 @@
       </a>
     </section>
 
-    <section class="max-w-6xl mx-auto px-5 pb-16">
-      <div class="flex items-end justify-between gap-4 mb-6">
-        <h2 class="text-xl font-semibold">Featured moments</h2>
-        <span class="text-xs text-white/40 flex items-center gap-2 max-w-xs text-right">
-          Best of @omni_puzzler · poetic &amp; Mission-aligned · each card opens a real post
-        </span>
+    <section class="max-w-6xl mx-auto px-5 pb-16" id="moments" aria-label="Moments library">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-xl font-semibold">Moments library</h2>
+          <p class="text-xs text-white/40 mt-1 max-w-xl" id="shelf-scope-note">
+            Ride <strong class="text-white/55">@omni_puzzler</strong>'s curated best — same vibes for every visitor.
+          </p>
+        </div>
+        <p class="text-[11px] text-white/35" id="shelf-refreshed">Shelf · Puzzler static shortlist</p>
       </div>
-      <div id="results" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-      <p id="empty" class="hidden text-white/50 mt-6">No moments match that query yet. Try â€œpeaceâ€, â€œspacesâ€, or â€œmissionâ€.</p>
+
+      <div class="flex flex-wrap items-center gap-2 mb-5" role="tablist" aria-label="Shelf tabs">
+        <button type="button" role="tab" id="tab-featured" data-tab="featured" aria-selected="true"
+          class="shelf-tab shelf-tab--on px-4 py-2 rounded-full text-sm font-semibold border">
+          Featured
+        </button>
+        <button type="button" role="tab" id="tab-articles" data-tab="articles" aria-selected="false"
+          class="shelf-tab px-4 py-2 rounded-full text-sm font-semibold border">
+          Articles
+        </button>
+        <span class="text-[11px] text-white/40 ml-1" id="tab-hint">Best-of Mission / poetic — steward-scored, not algorithmic</span>
+      </div>
+
+      <div id="results" class="x-moments-grid grid gap-3 md:gap-4"></div>
+      <p id="empty" class="hidden text-white/50 mt-6">No items match this tab + search yet.</p>
+
+      <div id="pager" class="mt-8 flex flex-wrap items-center justify-between gap-3 hidden">
+        <p class="text-xs text-white/40" id="pager-meta"></p>
+        <div class="flex items-center gap-2">
+          <button type="button" id="pager-prev" class="px-3 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/70 hover:border-glow/40 hover:text-glow disabled:opacity-30">← Prev</button>
+          <span class="text-xs text-white/45 tabular-nums" id="pager-pages"></span>
+          <button type="button" id="pager-next" class="px-3 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/70 hover:border-glow/40 hover:text-glow disabled:opacity-30">Next →</button>
+        </div>
+      </div>
     </section>
+
+    <style>
+      .shelf-tab {
+        border-color: rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.04);
+        color: rgba(255,255,255,0.65);
+      }
+      .shelf-tab--on, .shelf-tab[aria-selected="true"] {
+        border-color: rgba(34, 211, 238, 0.45);
+        background: rgba(34, 211, 238, 0.12);
+        color: #e8e4ff;
+      }
+    </style>
 
     <section id="how" class="border-t border-white/10 bg-black/20">
       <div class="max-w-6xl mx-auto px-5 py-16">
@@ -285,6 +474,11 @@
             <div class="font-semibold text-lg">OMNI Videos</div>
             <p class="text-sm text-white/55 mt-2">YouTube & mission footage â€” archived here.</p>
           </a>
+          <a href="https://onemissionnetworkandinstitute.org/vision-load?site=imi" class="glass card-hover rounded-2xl p-6 block border border-glow/20">
+            <div class="text-xs uppercase tracking-wider text-glow/80 mb-2">Assist</div>
+            <div class="font-semibold text-lg">OMNI Vision</div>
+            <p class="text-sm text-white/55 mt-2">Bot · Pixy · Vistory — podcast &amp; chatroom assistant for Spaces rooms.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -316,8 +510,8 @@
     </div>
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
-  <script src="archive-data.js"></script>
-  <script src="app.js"></script>
+  <script src="archive-data.js?v=20260801-puzzler"></script>
+  <script src="app.js?v=20260801-puzzler-vibes"></script>
   <script src="js/site-config.js"></script>
   <script src="js/feedback-widget.js" defer></script>
 
