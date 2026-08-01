@@ -44,10 +44,48 @@
     }
     .video-card { transition: border-color 0.2s, transform 0.2s; }
     .video-card:hover { border-color: rgba(139, 92, 246, 0.45); transform: translateY(-2px); }
+  
+    /* Mobile primary nav */
+    .imi-nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #e8e4ff;
+      cursor: pointer;
+    }
+    .imi-nav-toggle:hover { background: rgba(255,255,255,0.1); }
+    @media (max-width: 767px) {
+      .imi-nav-toggle { display: inline-flex; }
+    }
+    #imi-mobile-menu {
+      display: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(7,6,15,0.96);
+    }
+    #imi-mobile-menu.open { display: block; }
+    #imi-mobile-menu a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      color: rgba(232,228,255,0.8);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    #imi-mobile-menu a:hover,
+    #imi-mobile-menu a[aria-current="page"] {
+      color: #22d3ee;
+      background: rgba(139,92,246,0.12);
+    }
+
   </style>
 </head>
 <body class="text-star antialiased">
-  <header class="sticky top-0 z-40 glass">
+    <header class="sticky top-0 z-40 glass">
     <div class="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3 min-w-0">
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-accent to-glow flex items-center justify-center font-bold text-void text-sm shrink-0">IMI</div>
@@ -64,7 +102,21 @@
         <a href="/#trust" class="hover:text-white">Trust record</a>
         <a href="/#network" class="hover:text-white">Network</a>
       </nav>
-      <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener" class="text-xs md:text-sm px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/10">@omni_puzzler</a>
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener" class="hidden sm:inline-flex text-xs md:text-sm px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/10">@omni_puzzler</a>
+        <button type="button" id="imi-nav-toggle" class="imi-nav-toggle md:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="imi-mobile-menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="imi-mobile-menu">
+      <a href="/about">About</a>
+      <a href="/#archive">Archive</a>
+      <a href="/videos" aria-current="page">OMNI Videos</a>
+      <a href="/#how">How it works</a>
+      <a href="/#trust">Trust record</a>
+      <a href="/#network">Network</a>
+      <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener">@omni_puzzler on X</a>
     </div>
   </header>
 
@@ -157,5 +209,29 @@
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
   <script src="js/feedback-widget.js" defer></script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('imi-nav-toggle');
+      var menu = document.getElementById('imi-mobile-menu');
+      if (!btn || !menu) return;
+      function setOpen(open) {
+        menu.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        setOpen(!menu.classList.contains('open'));
+      });
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setOpen(false); });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+      });
+    })();
+  </script>
+
 </body>
 </html>
