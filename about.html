@@ -111,12 +111,13 @@
           <div class="text-[11px] text-white/45 tracking-wide">Record · Search · Trust</div>
         </div>
       </a>
-      <nav class="hidden md:flex items-center gap-5 text-sm text-white/70">
-        <a href="/about" class="text-white">About</a>
+      <nav class="hidden md:flex items-center gap-5 text-sm text-white/70" aria-label="Primary">
+        <a href="/about" class="text-glow font-medium" aria-current="page">About</a>
         <a href="/#archive" class="hover:text-white">Archive</a>
         <a href="/videos" class="hover:text-white">OMNI Videos</a>
         <a href="/#how" class="hover:text-white">How it works</a>
         <a href="/#trust" class="hover:text-white">Trust record</a>
+        <a href="/#network" class="hover:text-white">Network</a>
       </nav>
       <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener" class="text-xs md:text-sm px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/10">@omni_puzzler</a>
     </div>
@@ -259,19 +260,31 @@
     </section>
   </main>
 
-  <footer class="border-t border-white/10 py-10">
-    <div class="max-w-6xl mx-auto px-5 flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm text-white/45">
-      <div>
-        <span class="text-white/70">Institute of Mature Imagination</span>
-        · father’s idea · public record
+  <footer class="border-t border-white/10 py-8">
+    <div class="max-w-6xl mx-auto px-5 space-y-4 text-sm text-white/40">
+      <div class="flex flex-col md:flex-row gap-3 justify-between">
+        <div>© <span id="y"></span> Institute of Mature Imagination · instituteofmatureimagination.org</div>
+        <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs">
+          <a class="hover:text-white/70" href="/about">About</a>
+          <a class="hover:text-white/70" href="/videos">OMNI Videos</a>
+          <a class="hover:text-white/70" href="https://onemissionnetworkandinstitute.org/?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=about_footer">One Mission</a>
+          <a class="hover:text-white/70" href="https://intekspace.com/?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=about_footer">Intek Space</a>
+          <a class="hover:text-white/70" href="https://intekspace.com/store?utm_source=imi&utm_medium=referral&utm_campaign=sister_network&utm_content=about_footer">OMNI Store</a>
+        </div>
       </div>
-      <div class="flex flex-wrap gap-4">
-        <a href="/" class="hover:text-white">Home</a>
-        <a href="/about" class="hover:text-white">About</a>
-        <a href="/videos" class="hover:text-white">Videos</a>
-        <a href="https://onemissionnetworkandinstitute.org/" class="hover:text-white" target="_blank" rel="noopener">One Mission</a>
-      </div>
+      <p id="privacy" class="text-xs text-white/35 leading-relaxed max-w-3xl">
+        <strong class="text-white/50 font-medium">Privacy &amp; analytics.</strong>
+        This site uses <strong class="text-white/45">Google Analytics 4</strong>
+        to understand traffic. We do not use this tag to collect names, emails, or phone numbers from forms.
+        Google may process data per
+        <a class="text-glow/80 underline hover:text-glow" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s Privacy Policy</a>.
+        Questions:
+        <a class="text-glow/80 underline hover:text-glow" href="https://x.com/omni_puzzler" target="_blank" rel="noopener">@omni_puzzler</a>.
+        Sister sites: One Mission · Intek Space (separate analytics properties).
+      </p>
     </div>
   </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script src="js/feedback-widget.js" defer></script>
 </body>
 </html>
