@@ -61,19 +61,43 @@
     .invite-cta-secondary:hover {
       background: rgba(255, 255, 255, 0.1); border-color: rgba(34, 211, 238, 0.45); color: #22d3ee;
     }
-    .about-hero-img {
-      width: 100%;
-      max-height: min(72vh, 720px);
-      object-fit: cover;
-      object-position: center 28%;
+    /* Full frame — no crop. Letterbox / pillarbox into glass stage. */
+    .about-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 40%, rgba(139, 92, 246, 0.12), transparent 65%),
+        rgba(0, 0, 0, 0.35);
+      padding: 0.75rem;
+    }
+    @media (min-width: 768px) {
+      .about-stage { padding: 1.25rem 1.5rem; }
+    }
+    .about-stage--hero {
+      min-height: min(70vh, 640px);
+    }
+    .about-stage--panel {
+      min-height: min(48vh, 420px);
+    }
+    .about-hero-img,
+    .about-panel-img {
       display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      margin: 0 auto;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 0.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+    .about-hero-img {
+      max-height: min(78vh, 860px);
     }
     .about-panel-img {
-      width: 100%;
-      border-radius: 1rem;
-      display: block;
-      max-height: 420px;
-      object-fit: cover;
+      max-height: min(56vh, 560px);
+      border-radius: 0.75rem;
     }
   </style>
 </head>
@@ -104,14 +128,16 @@
       <div class="max-w-6xl mx-auto px-5 pt-8 md:pt-12">
         <p class="text-glow/90 text-xs uppercase tracking-[0.2em] mb-4">In memory of a father’s idea · stewarded for the public</p>
         <div class="glass rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(139,92,246,0.2)]">
-          <img
-            src="images/about/dad-hero.jpg"
-            alt="OMNI Vision dedication portrait — for Dad"
-            class="about-hero-img"
-            width="1200"
-            height="900"
-            fetchpriority="high"
-          />
+          <div class="about-stage about-stage--hero">
+            <img
+              src="images/about/dad-hero.jpg"
+              alt="OMNI Vision dedication portrait — for Dad"
+              class="about-hero-img"
+              width="1200"
+              height="1500"
+              fetchpriority="high"
+            />
+          </div>
         </div>
         <div class="mt-8 md:mt-10 max-w-2xl">
           <h1 class="text-3xl md:text-5xl font-semibold tracking-tight leading-[1.15]">
@@ -144,14 +170,16 @@
     <section class="max-w-6xl mx-auto px-5 py-10 md:py-14">
       <div class="grid md:grid-cols-2 gap-8 md:gap-10 items-center">
         <div class="glass rounded-2xl overflow-hidden order-2 md:order-1">
-          <img
-            src="images/about/inheritance-drive.jpg"
-            alt="OMNI Vision — the inheritance was the drive"
-            class="about-panel-img"
-            width="900"
-            height="700"
-            loading="lazy"
-          />
+          <div class="about-stage about-stage--panel">
+            <img
+              src="images/about/inheritance-drive.jpg"
+              alt="OMNI Vision — the inheritance was the drive"
+              class="about-panel-img"
+              width="900"
+              height="1200"
+              loading="lazy"
+            />
+          </div>
         </div>
         <div class="order-1 md:order-2 max-w-xl">
           <h2 class="text-2xl md:text-3xl font-semibold tracking-tight leading-snug">
@@ -176,14 +204,16 @@
           </p>
         </div>
         <div class="glass rounded-2xl overflow-hidden">
-          <img
-            src="images/about/dream-alone.jpg"
-            alt="OMNI Vision — fidelity without a crowd"
-            class="about-panel-img"
-            width="900"
-            height="700"
-            loading="lazy"
-          />
+          <div class="about-stage about-stage--panel">
+            <img
+              src="images/about/dream-alone.jpg"
+              alt="OMNI Vision — fidelity without a crowd"
+              class="about-panel-img"
+              width="900"
+              height="1200"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>
