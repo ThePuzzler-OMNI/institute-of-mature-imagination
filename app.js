@@ -7,17 +7,41 @@
   const year = document.getElementById("y");
   if (year) year.textContent = String(new Date().getFullYear());
 
-  /** Hero Featured Space card — SSOT is archive-data.js item with featured:true */
+  function sourceKind(item) {
+    const s = item.source || "";
+    if (/\/i\/spaces\//i.test(s) || /spaces\.x\.com/i.test(s)) return "space";
+    if (/\/status\//i.test(s)) return "post";
+    return "other";
+  }
+
+  /** Bare profile URLs do not drive traffic to a moment — refuse to paint a fake CTA. */
+  function isDeepSource(item) {
+    const s = (item && item.source) || "";
+    return /\/status\/\d+/i.test(s) || /\/i\/spaces\//i.test(s) || /spaces\.x\.com/i.test(s);
+  }
+
+
+  /** Hero card — prefer featured Space URL; else first featured post with deep link */
   function paintLiveHero() {
     const el = document.getElementById("live-space");
     if (!el) return;
-    const feat = data.find((x) => x && x.featured && x.source) || data.find((x) => /spaces/i.test(x.source || ""));
-    if (!feat) return;
+    const feat =
+      data.find((x) => x && x.featured && isDeepSource(x) && sourceKind(x) === "space") ||
+      data.find((x) => x && x.featured && isDeepSource(x)) ||
+      data.find((x) => x && isDeepSource(x) && sourceKind(x) === "space");
+    if (!feat) {
+      el.href = "https://x.com/omni_puzzler";
+      const titleEl = el.querySelector("[data-live-title]");
+      const blurbEl = el.querySelector("[data-live-blurb]");
+      if (titleEl) titleEl.textContent = "Best of @omni_puzzler";
+      if (blurbEl) blurbEl.textContent = "Featured moments below link to real posts — curated for Mission, not vanity metrics.";
+      return;
+    }
     el.href = feat.source;
     const titleEl = el.querySelector("[data-live-title]");
     const blurbEl = el.querySelector("[data-live-blurb]");
-    if (titleEl) titleEl.textContent = feat.title || "Featured Space";
-    if (blurbEl) blurbEl.textContent = feat.blurb || "Open the real room on X.";
+    if (titleEl) titleEl.textContent = feat.title || "Featured";
+    if (blurbEl) blurbEl.textContent = feat.blurb || "Open on X.";
   }
 
   /** Full-width invite for pin:true — set apart from archive tiles so people DM for Space time */
@@ -62,19 +86,25 @@
   }
 
   function card(item) {
+    if (!isDeepSource(item)) {
+      return ""; // skip broken / profile-only rows
+    }
     const tags = (item.tags || [])
       .map((t) => `<span class="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/50">${t}</span>`)
       .join(" ");
     const featured = !!item.featured;
-    const isSpace = /space/i.test(item.kind || "") || /spaces\.x\.com|x\.com\/i\/spaces/i.test(item.source || "");
+    const sk = sourceKind(item);
     const border = featured
       ? "border-accent/50 ring-1 ring-accent/30"
       : "border-white/8";
-    const cta = isSpace
-      ? (featured ? "Open this Space on X →" : "Open Space on X →")
-      : "Open source on X →";
+    const cta =
+      sk === "space"
+        ? "Open this Space on X →"
+        : sk === "post"
+          ? "Open this post on X →"
+          : "Open on X →";
     const badge = featured
-      ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-void bg-glow/90 px-2 py-0.5 rounded-full">Featured live</span>'
+      ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-void bg-glow/90 px-2 py-0.5 rounded-full">Best of</span>'
       : "";
     return `
       <article class="glass card-hover rounded-2xl p-5 flex flex-col gap-3 ${border}">

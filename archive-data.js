@@ -1,101 +1,87 @@
 /**
- * IMI archive — real Spaces first (father's idea: trusted human moments).
- * Live Space URL is the point — not only seed blurbs.
+ * IMI Featured Moments — steward-curated best of @omni_puzzler
+ * -----------------------------------------------------------
+ * PURPOSE NOW:
+ *   Drive traffic to the most poetic / unique / Mission-aligned posts —
+ *   NOT “most viewed,” NOT a full firehose.
+ *
+ * RULES:
+ *   - Every public card MUST have source = a real post or Space URL
+ *     (…/status/… or …/i/spaces/…), never bare https://x.com/omni_puzzler alone.
+ *   - Editorial: The Puzzler / steward picks “best of.” Quality over volume.
+ *
+ * LATER (when archive files arrive):
+ *   - Import full export / third-party archive into a members archive.
+ *   - Automate thePuzzler + mission members into a clean OMNI archive.
+ *   - Architecture must be proofed first — do not thrash a half-pipe here.
+ *
+ * Father’s idea: trusted human moments, as they happened.
  */
 window.IMI_ARCHIVE = [
+  /* —— Pin: invitation (not a moment tile; invite strip) —— */
   {
-    id: "s-20260727-space-titles",
+    id: "pin-request-space",
     title: "Request Space time — pick a topic, DM a number",
     date: "2026-07-27",
-    tags: ["spaces", "titles", "request", "myspace", "host", "menu"],
+    tags: ["spaces", "titles", "request", "host", "menu"],
     blurb:
-      "Want real Space time — not a vague someday? Open the topic catalog, pick a number, and DM @omni_puzzler that number. Guests speak first; host speaks last. Chill presence. God stuff welcome. This is how you get a room.",
-    source: "https://x.com/omni_puzzler/status/2081550590174233015?s=20",
-    kind: "X Article",
+      "Want real Space time — not a vague someday? Open the topic catalog, pick a number, and DM @omni_puzzler that number. Guests speak first; host speaks last. Chill presence. God stuff welcome.",
+    source: "https://x.com/omni_puzzler/status/2081550590174233015",
+    kind: "Invite",
     pin: true,
   },
 
+  /* —— Best-of posts (poetic / Mission / unique) — each links to a real status —— */
   {
-    id: "s-20260725-myspace-live",
-    title: "MYSPACE — live Space (thePuzzler)",
-    date: "2026-07-25",
-    tags: ["myspace", "live", "peace", "spaces", "jesus", "presence", "featured"],
+    id: "post-dad-dedication",
+    title: "This is for you, Dad — a dedication made visible",
+    date: "2026-07-31",
+    tags: ["dedication", "father", "imi", "vision", "best"],
     blurb:
-      "Real X Space — chill presence, God stuff, guests first, host speaks last. This is the IMI idea in the wild: a meeting of the mind you can open as it happened, not a rewritten summary.",
-    source: "https://x.com/i/spaces/1nGeLLdlnrRKX?s=20",
-    kind: "Live Space",
+      "Homage and public stewardship: a father’s idea held long enough for others to meet it. Not private biography — a dedication for the record.",
+    source: "https://x.com/omni_puzzler/status/2083325719023649261",
+    kind: "Vision post",
     featured: true,
   },
   {
-    id: "s-20260724-myspace",
-    title: "MYSPACE — host posture (copyright 20260724)",
-    date: "2026-07-24",
-    tags: ["peace", "spaces", "jesus", "presence", "myspace", "template"],
-    blurb: "Same spirit as the live Space: chill, speak last. Opener frozen 20260724. Open the live Space card above for the real room.",
-    source: "https://x.com/i/spaces/1nGeLLdlnrRKX?s=20",
-    kind: "Space note",
+    id: "post-inheritance-drive",
+    title: "The inheritance was the drive — the kingdom had to be redrawn",
+    date: "2026-07-31",
+    tags: ["inheritance", "drive", "mission", "best", "poetic"],
+    blurb:
+      "What was given was not a finished map — it was the will to keep drawing. Mature imagination as fidelity under redraw.",
+    source: "https://x.com/omni_puzzler/status/2083325235265208832",
+    kind: "Vision post",
+    featured: true,
   },
   {
-    id: "s-20260724-ledger",
-    title: "Full execute / full notion / full comply",
-    date: "2026-07-24",
-    tags: ["commands", "notion", "build", "trust", "mission"],
-    blurb: "Command lexicon night: durable ledger over chat-only promises. Writing supersedes thrash.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Command thread",
+    id: "post-dream-alone",
+    title: "When the dream is alive in you, but seemingly no one else near you",
+    date: "2026-07-31",
+    tags: ["solitude", "fidelity", "archive", "best", "poetic"],
+    blurb:
+      "Fidelity does not wait for a crowd. Archive makes solitude shareable without sales — the IMI spirit in one frame.",
+    source: "https://x.com/omni_puzzler/status/2083193783303192771",
+    kind: "Vision post",
+    featured: true,
   },
   {
-    id: "s-20260724-screens",
-    title: "All screens / Flight 13 / Microsoft truth",
-    date: "2026-07-24",
-    tags: ["screens", "spacex", "microsoft", "calendar", "launch"],
-    blurb: "Honest multi-screen map. Grok cannot force Google Calendar or SpaceX clocks. Azure is real; Macrohard is not.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Thread",
+    id: "post-space-catalog",
+    title: "Space time is real — catalog, number, DM",
+    date: "2026-07-27",
+    tags: ["spaces", "presence", "host", "mission", "best"],
+    blurb:
+      "The practical door into presence: topics listed, a number chosen, a DM sent. Meetings of the mind you can still open as they happened.",
+    source: "https://x.com/omni_puzzler/status/2081550590174233015",
+    kind: "X post",
   },
-  {
-    id: "s-20260725-imi",
-    title: "IMI vision — Spaces as trusted record",
-    date: "2026-07-25",
-    tags: ["imi", "spaces", "archive", "father", "trust", "singularity"],
-    blurb: "Father's idea: organized repository of Spaces, AI-TV style query to real human video moments. IMI + One Mission + Intek Space.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Vision",
-  },
-  {
-    id: "s-20260725-vercel",
-    title: "Vercel empty — deploy the real files",
-    date: "2026-07-25",
-    tags: ["vercel", "deploy", "github", "build"],
-    blurb: "Online Grok cannot push files. Build Grok owns sites/imi and sites/intekspace on disk + GitHub.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Ops",
-  },
-  {
-    id: "s-20260630-earth",
-    title: "EarthBase / EarthMind seeds",
-    date: "2026-06-30",
-    tags: ["earthbase", "earthmind", "physics", "future"],
-    blurb: "Future concept names under One Mission continuity — not Court thrash.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Idea",
-  },
-  {
-    id: "s-202607-education",
-    title: "Debt-free education · one mission school",
-    date: "2026-07-05",
-    tags: ["education", "debt", "finance", "freedom", "mission"],
-    blurb: "Graduate only when out of debt and earning. Strategic investment in human flourishing.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Thesis",
-  },
-  {
-    id: "s-20260724-gardens",
-    title: "I am in full control of me · tend the gardens",
-    date: "2026-07-24",
-    tags: ["gardens", "sovereignty", "peace", "family"],
-    blurb: "Steward sovereignty constraint. Agents never coerce. Five Gardens care is life practice.",
-    source: "https://x.com/omni_puzzler",
-    kind: "Principle",
-  },
+
+  /*
+   * PLACEHOLDERS FOR STEWARD CURATION (replace source with status URLs only):
+   * When you have a best-of list, paste real https://x.com/omni_puzzler/status/… links.
+   * Until then we do not invent IDs or point cards at the bare profile.
+   *
+   * Future full archive: import from your external archive files → separate
+   * members archive surface once architecture is proofed.
+   */
 ];
