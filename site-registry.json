@@ -4,11 +4,13 @@
   "domain": "https://instituteofmatureimagination.org",
   "og_dir": "images/og",
   "og_path_prefix": "/images/og/",
-  "og_cache_bust": "20260802d",
+  "og_cache_bust": "20260802e",
   "theme": "imi-void",
   "chrome": {
     "mark": "IMI",
     "home_href": "index.html",
+    "brand_primary": "Institute of Mature Imagination",
+    "brand_secondary": "In memory of a father's idea · stewarded for the public",
     "nav": [
       { "href": "about.html", "label": "About" },
       { "href": "index.html#archive", "label": "Archive" },
@@ -25,8 +27,8 @@
       "id": "home",
       "file": "index.html",
       "path": "/",
-      "title": "Institute of Mature Imagination",
-      "subtitle": "Archive of real conversations of the mind",
+      "title": "Archive",
+      "subtitle": "Real conversations of the mind",
       "description": "Organized repository of recorded and live X Spaces. Talk out loud. Find the moment. Trust the record.",
       "og_slug": "home",
       "public": true
@@ -35,8 +37,8 @@
       "id": "about",
       "file": "about.html",
       "path": "/about",
-      "title": "Institute of Mature Imagination",
-      "subtitle": "About · Father's idea · public record",
+      "title": "About",
+      "subtitle": "Dedication made visible",
       "description": "What the Institute of Mature Imagination is and why the archive exists.",
       "og_slug": "about",
       "public": true
@@ -45,8 +47,8 @@
       "id": "videos",
       "file": "videos.html",
       "path": "/videos",
-      "title": "OMNI Videos",
-      "subtitle": "Institute of Mature Imagination · Spaces and talks",
+      "title": "Videos",
+      "subtitle": "Spaces and talks",
       "description": "Video library linked from Institute of Mature Imagination and One Mission.",
       "og_slug": "videos",
       "public": true

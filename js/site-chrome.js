@@ -44,14 +44,26 @@
         );
       })
       .join('');
+    var primary = chrome.brand_primary || 'Institute of Mature Imagination';
+    var secondary =
+      chrome.brand_secondary ||
+      "In memory of a father's idea · stewarded for the public";
     return (
-      '<div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">' +
+      '<div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">' +
       '<a href="' +
       esc(chrome.home_href || 'index.html') +
-      '" class="flex items-center gap-2 text-star font-semibold min-w-0" title="Institute of Mature Imagination">' +
+      '" class="flex items-center gap-2 text-star font-semibold min-w-0" title="' +
+      esc(primary + ' — ' + secondary) +
+      '">' +
       '<span class="w-8 h-8 shrink-0 rounded-lg glass flex items-center justify-center text-xs text-accent">' +
       esc(chrome.mark || 'IMI') +
-      '</span><span class="text-sm sm:text-base leading-snug truncate">Institute of Mature Imagination</span></a>' +
+      '</span><span class="flex flex-col leading-tight min-w-0">' +
+      '<span class="text-sm sm:text-base leading-snug truncate">' +
+      esc(primary) +
+      '</span>' +
+      '<span class="text-[10px] sm:text-[11px] font-normal text-glow/80 tracking-wide truncate">' +
+      esc(secondary) +
+      '</span></span></a>' +
       '<nav class="hidden md:flex items-center gap-5 shrink-0">' +
       desktop +
       '</nav>' +
@@ -82,6 +94,12 @@
       '<div>Sister network: ' +
       sisters +
       '</div>' +
+      '<p class="text-xs text-glow/70">' +
+      esc(
+        chrome.brand_secondary ||
+          "In memory of a father's idea · stewarded for the public"
+      ) +
+      '</p>' +
       '<p class="text-xs text-star/40">Archive stewarded for the public record. Analytics may run on sister sites.</p>' +
       '</div>'
     );
