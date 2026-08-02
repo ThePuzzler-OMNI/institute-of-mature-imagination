@@ -1,0 +1,55 @@
+{
+  "schema": "omni-public-web-registry/v1",
+  "brand": "imi",
+  "domain": "https://instituteofmatureimagination.org",
+  "og_dir": "images/og",
+  "og_path_prefix": "/images/og/",
+  "og_cache_bust": "20260802c",
+  "theme": "imi-void",
+  "chrome": {
+    "mark": "IMI",
+    "home_href": "index.html",
+    "nav": [
+      { "href": "about.html", "label": "About" },
+      { "href": "index.html#archive", "label": "Archive" },
+      { "href": "videos.html", "label": "Videos" },
+      { "href": "https://onemissionnetworkandinstitute.org/forge.html", "label": "Vision", "external": true }
+    ],
+    "sister_links": [
+      { "href": "https://onemissionnetworkandinstitute.org/", "label": "One Mission" },
+      { "href": "https://intekspace.com/", "label": "Intek Space" }
+    ]
+  },
+  "pages": [
+    {
+      "id": "home",
+      "file": "index.html",
+      "path": "/",
+      "title": "Institute of Mature Imagination",
+      "subtitle": "Archive of real conversations of the mind",
+      "description": "Organized repository of recorded and live X Spaces. Talk out loud. Find the moment. Trust the record.",
+      "og_slug": "home",
+      "public": true
+    },
+    {
+      "id": "about",
+      "file": "about.html",
+      "path": "/about",
+      "title": "About IMI",
+      "subtitle": "Father's idea · public record",
+      "description": "What the Institute of Mature Imagination is and why the archive exists.",
+      "og_slug": "about",
+      "public": true
+    },
+    {
+      "id": "videos",
+      "file": "videos.html",
+      "path": "/videos",
+      "title": "OMNI Videos",
+      "subtitle": "Spaces and talks",
+      "description": "Video library linked from IMI and One Mission.",
+      "og_slug": "videos",
+      "public": true
+    }
+  ]
+}
