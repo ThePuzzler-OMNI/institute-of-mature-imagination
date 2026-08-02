@@ -1,13 +1,16 @@
 /**
- * Sitewide bug / feature request button — scalable context-rich reporter.
- * Captures page, device, membership, site for both logged-in and anonymous users.
- * Primary: Bug Desk /api/bugs (multi-site steward dashboard).
- * Mirror: Azure /api/service-feedback.
- * Backup: FormSubmit email + optional structured GitHub issue.
+ * Sitewide bug / feature request button — brain-dump first, durable Bug Desk SSOT.
+ * POST /api/bugs with Content-Type: text/plain (JSON body as string — Azure-safe).
+ * Email: short notify after durable success; full body only if durable fails.
+ * Soft limit 8000 on brain dump — visible count; block over limit (no silent truncation).
  */
 (function () {
   if (window.__omniFeedbackLoaded) return;
   window.__omniFeedbackLoaded = true;
+
+  var BRAIN_MAX = 8000;
+  var BUGS_API = 'https://onemissionnetworkandinstitute.org/api/bugs';
+  var ADMIN_BASE = 'https://onemissionnetworkandinstitute.org/bug-desk-admin.html';
 
   function loadScript(src, cb) {
     var s = document.createElement('script');
@@ -18,9 +21,21 @@
   }
 
   function ensureDeps(cb) {
+    // Never block send on local inbox helper — durable /api/bugs is SSOT
+    function done() {
+      try {
+        cb();
+      } catch (e) {
+        var st = document.getElementById('omni-fb-status');
+        if (st) {
+          st.style.color = '#fbbf24';
+          st.textContent = 'Widget error: ' + (e && e.message ? e.message : String(e));
+        }
+      }
+    }
     function next() {
-      if (!window.OmniBugs) return loadScript('js/bugs-store.js', cb);
-      cb();
+      if (!window.OmniBugs) return loadScript('js/bugs-store.js', done);
+      done();
     }
     if (!window.OMNI_SITE) loadScript('js/site-config.js', next);
     else next();
@@ -28,10 +43,22 @@
 
   function detectSite() {
     var h = (location.hostname || '').toLowerCase();
+    var path = (location.pathname || '').toLowerCase();
     if (h.indexOf('intekspace') !== -1) return 'intekspace';
     if (h.indexOf('instituteofmatureimagination') !== -1 || h.indexOf('imi') !== -1) return 'imi';
     if (h.indexOf('onemission') !== -1) return 'onemission';
-    return h || 'unknown';
+    if (path.indexOf('/sites/intekspace') === 0 || path.indexOf('intekspace') !== -1) return 'intekspace';
+    if (path.indexOf('/sites/imi') === 0) return 'imi';
+    if (path.indexOf('/sites/onemission') === 0) return 'onemission';
+    return h || 'onemission';
+  }
+
+  function siteIdFromCtx(site) {
+    var s = String(site || '').toLowerCase();
+    if (s.indexOf('intek') !== -1) return 'intekspace';
+    if (s.indexOf('imi') !== -1 || s.indexOf('mature') !== -1) return 'imi';
+    if (s.indexOf('onemission') !== -1 || s === 'omni' || s === 'unknown') return 'onemission';
+    return 'onemission';
   }
 
   function detectMembership(cb) {
@@ -40,7 +67,10 @@
       if (p) {
         result.userId = p.userId || '';
         result.name = p.name || p.userDetails || '';
-        result.email = p.email || (p.userDetails && p.userDetails.indexOf('@') !== -1 ? p.userDetails : '') || '';
+        result.email =
+          p.email ||
+          (p.userDetails && String(p.userDetails).indexOf('@') !== -1 ? p.userDetails : '') ||
+          '';
         result.provider = p.identityProvider || p.provider || '';
         if (window.OMNI_ACCESS && typeof window.OMNI_ACCESS.resolveRole === 'function') {
           result.role = window.OMNI_ACCESS.resolveRole(p);
@@ -98,6 +128,23 @@
     };
   }
 
+  function firstLineTitle(brain) {
+    var line = String(brain || '')
+      .split(/\r?\n/)
+      .map(function (l) {
+        return l.trim();
+      })
+      .filter(Boolean)[0] || '';
+    if (line.length > 120) line = line.slice(0, 117) + '…';
+    return line;
+  }
+
+  function resolveTitle(f) {
+    var t = (f.title || '').trim();
+    if (t) return t;
+    return firstLineTitle(f.desc) || 'Untitled report';
+  }
+
   function githubNewIssueUrl(type, title, desc, steps, severity, ctx) {
     var cfg = window.OMNI_SITE && window.OMNI_SITE.feedbackRepo;
     if (!cfg) return null;
@@ -118,32 +165,17 @@
       '### Site',
       ctx.site,
       '',
-      '### Membership',
-      (ctx.member ? 'member' : 'non-member') + ' · role=' + (ctx.role || 'guest'),
+      '### Brain dump',
+      desc,
+      '',
+      '### Steps',
+      steps || '—',
       '',
       '### Page',
       ctx.pageUrl,
-      ctx.pageTitle ? '(' + ctx.pageTitle + ')' : '',
-      '',
-      '### Details',
-      desc,
-      '',
-      '### Steps / Expected vs actual',
-      steps || '—',
-      '',
-      '### Context',
-      '- User-Agent: ' + (ctx.userAgent || '—'),
-      '- Viewport: ' + (ctx.viewport || '—') + ' · Screen: ' + (ctx.screen || '—'),
-      '- Language: ' + (ctx.language || '—') + ' · TZ: ' + (ctx.timezone || '—'),
-      '- Referrer: ' + (ctx.referrer || '—'),
-      '- Captured: ' + (ctx.capturedAt || ''),
-      '',
-      '### Contact',
-      (ctx.reporterName || '') + (ctx.reporterEmail ? ' <' + ctx.reporterEmail + '>' : '') || '(anonymous)',
-      ctx.reporterUserId ? 'userId: ' + ctx.reporterUserId : '',
       '',
       '---',
-      '_Submitted from feedback widget · Hub: #' + (cfg.hubIssue || '5') + '_',
+      '_feedback-widget_',
     ].join('\n');
     return (
       'https://github.com/' +
@@ -159,25 +191,18 @@
     );
   }
 
-
+  /** Durable SSOT — text/plain body (JSON string) for reliable SWA Functions parsing */
   function postToBugDesk(f, ctx, item) {
     var desk = (window.OMNI_SITE && window.OMNI_SITE.bugDesk) || {};
-    var api = desk.api || desk.apiAzure || 'https://onemissionnetworkandinstitute.org/api/bugs';
-    var siteMap = {
-      onemission: 'onemission',
-      intekspace: 'intekspace',
-      imi: 'imi',
-    };
-    var siteId = siteMap[ctx.site] || (ctx.site === 'unknown' ? 'other' : 'other');
-    if (ctx.site && ctx.site.indexOf('intek') !== -1) siteId = 'intekspace';
-    if (ctx.site && (ctx.site.indexOf('imi') !== -1 || ctx.site.indexOf('mature') !== -1)) siteId = 'imi';
-    if (ctx.site && ctx.site.indexOf('onemission') !== -1) siteId = 'onemission';
+    var api = desk.api || desk.apiAzure || BUGS_API;
+    var siteId = siteIdFromCtx(ctx.site);
+    var title = resolveTitle(f);
 
     var payload = {
       siteId: siteId,
       type: f.type === 'feature' ? 'feature' : f.type === 'other' ? 'other' : 'bug',
       severity: f.severity || 'medium',
-      title: f.title,
+      title: title,
       description: f.desc,
       steps: f.steps || '',
       isMember: !!ctx.member,
@@ -194,85 +219,106 @@
       timezone: ctx.timezone || '',
       referrer: ctx.referrer || '',
       context: ctx,
+      localId: item && item.id ? item.id : '',
     };
 
     return fetch(api, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', Accept: 'application/json' },
       body: JSON.stringify(payload),
     }).then(function (r) {
-      return r.json().then(function (j) {
+      return r.text().then(function (text) {
+        var j = {};
+        try {
+          j = text ? JSON.parse(text) : {};
+        } catch (e) {
+          throw new Error('bug-desk bad JSON ' + r.status);
+        }
         if (!r.ok || (j && j.ok === false)) {
-          throw new Error((j && j.error) || ('bug-desk ' + r.status));
+          throw new Error((j && j.error) || 'bug-desk ' + r.status);
         }
         return j;
       });
     });
   }
 
-  function postToAzure(f, ctx, item) {
-    var apiBase =
-      (window.OMNI_SITE && window.OMNI_SITE.apiBase) ||
-      'https://onemission-omni-chat.azurewebsites.net';
-    var kind = f.type === 'feature' ? 'feature' : f.type === 'other' ? 'service' : 'bug';
-    // Pack rich context into description so it survives even if metadata is stripped
-    var richDesc = [
-      f.desc,
-      '',
-      '---',
-      'Steps / Expected vs actual:',
-      f.steps || '—',
-      '',
-      'Context:',
-      '- Site: ' + (ctx.site || ''),
-      '- Member: ' + (ctx.member ? 'yes' : 'no') + ' (role=' + (ctx.role || 'guest') + ')',
-      '- Severity: ' + (f.severity || 'medium'),
-      '- Page: ' + (ctx.pageUrl || ''),
-      '- Title: ' + (ctx.pageTitle || ''),
-      '- UA: ' + (ctx.userAgent || ''),
-      '- Viewport: ' + (ctx.viewport || ''),
-      '- TZ: ' + (ctx.timezone || ''),
-      '- Referrer: ' + (ctx.referrer || ''),
-      '- Reporter: ' + (ctx.reporterName || '') + (ctx.reporterEmail ? ' <' + ctx.reporterEmail + '>' : ''),
-      '- UserId: ' + (ctx.reporterUserId || ''),
-      '- LocalId: ' + (item && item.id ? item.id : ''),
-    ].join('\n');
+  function formSubmitEndpoint() {
+    return (
+      (window.OMNI_SITE && window.OMNI_SITE.formSubmitEndpoint) ||
+      'https://formsubmit.co/ajax/techsupport@onemissionnetworkandinstitute.org'
+    );
+  }
 
-    var payload = {
-      source: 'web',
-      kind: kind,
-      title: f.title,
-      description: richDesc,
-      page_url: ctx.pageUrl || location.href,
-      entra_user_id: ctx.reporterUserId || null,
-      metadata: {
-        site: ctx.site,
-        member: !!ctx.member,
-        role: ctx.role || 'guest',
-        severity: f.severity || 'medium',
-        steps: f.steps || '',
-        pageTitle: ctx.pageTitle || '',
-        userAgent: ctx.userAgent || '',
-        viewport: ctx.viewport || '',
-        screen: ctx.screen || '',
-        language: ctx.language || '',
-        timezone: ctx.timezone || '',
-        referrer: ctx.referrer || '',
-        reporterEmail: ctx.reporterEmail || f.email || '',
-        reporterName: ctx.reporterName || '',
-        localId: item && item.id ? item.id : '',
-        source: 'feedback-widget',
-      },
-    };
+  /** Short steward alert only (id + title + admin link) */
+  function emailShortNotify(f, ctx, deskId, title) {
+    var endpoint = formSubmitEndpoint();
+    var admin =
+      ADMIN_BASE +
+      '?site=' +
+      encodeURIComponent(siteIdFromCtx(ctx.site)) +
+      '&q=' +
+      encodeURIComponent(deskId || '');
+    var fd = new FormData();
+    fd.append(
+      '_subject',
+      '[OMNI ' + f.type + '][' + ctx.site + '] ' + (title || '').slice(0, 80)
+    );
+    fd.append('_template', 'table');
+    fd.append('_captcha', 'false');
+    fd.append(
+      'message',
+      [
+        'Bug Desk durable save OK.',
+        'id: ' + (deskId || '—'),
+        'title: ' + (title || '—'),
+        'type: ' + f.type + ' · severity: ' + (f.severity || 'medium'),
+        'site: ' + (ctx.site || '') + ' · member: ' + (ctx.member ? 'yes' : 'no'),
+        'page: ' + (ctx.pageUrl || ''),
+        'admin: ' + admin,
+        '',
+        '(Full brain dump is in Bug Desk — not in this email.)',
+      ].join('\n')
+    );
+    fd.append('bug_desk_id', deskId || '');
+    fd.append('email', ctx.reporterEmail || f.email || 'anonymous@feedback.local');
+    fd.append('name', ctx.reporterName || 'Guest');
+    return fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).catch(
+      function () {}
+    );
+  }
 
-    return fetch(apiBase.replace(/\/$/, '') + '/api/service-feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
-    }).then(function (r) {
-      if (!r.ok) throw new Error('azure ' + r.status);
-      return r.json();
-    });
+  /** Full body only when durable path failed */
+  function emailFullFallback(f, ctx, item, title) {
+    var endpoint = formSubmitEndpoint();
+    var fd = new FormData();
+    fd.append(
+      '_subject',
+      '[OMNI FAILSAFE ' + f.type + '][' + ctx.site + '] ' + (title || '').slice(0, 80)
+    );
+    fd.append('_template', 'table');
+    fd.append('_captcha', 'false');
+    fd.append(
+      'message',
+      [
+        'DURABLE BUG DESK FAILED — full report in email.',
+        'local_id: ' + (item && item.id ? item.id : '—'),
+        'title: ' + (title || '—'),
+        'type: ' + f.type + ' · severity: ' + (f.severity || 'medium'),
+        'site: ' + (ctx.site || '') + ' · member: ' + (ctx.member ? 'yes' : 'no'),
+        'page: ' + (ctx.pageUrl || ''),
+        '',
+        '=== BRAIN DUMP ===',
+        f.desc,
+        '',
+        '=== STEPS ===',
+        f.steps || '—',
+        '',
+        'From: ' + (ctx.reporterEmail || f.email || 'anonymous'),
+      ].join('\n')
+    );
+    fd.append('email', ctx.reporterEmail || f.email || 'anonymous@feedback.local');
+    fd.append('name', (item && item.reporterName) || 'Guest');
+    return fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
   }
 
   function inject() {
@@ -286,10 +332,14 @@
       '#omni-fb-backdrop.open{display:flex}',
       '#omni-fb-panel{background:#0f172a;border:1px solid #1e293b;border-radius:1.25rem;width:100%;max-width:30rem;padding:1.25rem;color:#e2e8f0;max-height:92vh;overflow:auto}',
       '#omni-fb-panel h2{margin:0 0 .25rem;font-size:1.15rem}',
-      '#omni-fb-panel p.hint{margin:0 0 1rem;font-size:.75rem;color:#94a3b8}',
+      '#omni-fb-panel p.hint{margin:0 0 .75rem;font-size:.75rem;color:#94a3b8}',
       '#omni-fb-panel label{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;margin:.65rem 0 .25rem}',
-      '#omni-fb-panel input,#omni-fb-panel select,#omni-fb-panel textarea{width:100%;background:#020617;border:1px solid #334155;border-radius:.75rem;padding:.6rem .75rem;color:#e2e8f0;font:14px Inter,system-ui,sans-serif}',
-      '#omni-fb-panel textarea{min-height:4.5rem;resize:vertical}',
+      '#omni-fb-panel input,#omni-fb-panel select,#omni-fb-panel textarea{width:100%;background:#020617;border:1px solid #334155;border-radius:.75rem;padding:.6rem .75rem;color:#e2e8f0;font:14px Inter,system-ui,sans-serif;box-sizing:border-box}',
+      '#omni-fb-desc{min-height:9rem;resize:vertical}',
+      '#omni-fb-steps{min-height:3rem;resize:vertical}',
+      '#omni-fb-count{font-size:.7rem;color:#64748b;margin-top:.25rem;text-align:right}',
+      '#omni-fb-count.over{color:#fbbf24;font-weight:600}',
+      '#omni-fb-title-suggest{font-size:.7rem;color:#64748b;margin:.25rem 0 0}',
       '#omni-fb-ctx{font-size:.65rem;color:#64748b;margin-top:.5rem;line-height:1.4}',
       '#omni-fb-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}',
       '#omni-fb-actions button,#omni-fb-actions a{flex:1;min-width:6.5rem;text-align:center;padding:.65rem;border-radius:9999px;font:600 12px Inter,system-ui,sans-serif;text-decoration:none;border:0;cursor:pointer}',
@@ -298,6 +348,8 @@
       '#omni-fb-board{background:transparent;color:#94a3b8;border:1px solid #334155!important}',
       '#omni-fb-close{background:#334155;color:#e2e8f0}',
       '#omni-fb-status{font-size:.75rem;margin-top:.75rem;color:#34d399;min-height:1rem}',
+      '#omni-fb-row{display:flex;gap:.5rem}',
+      '#omni-fb-row > *{flex:1}',
     ].join('');
     document.head.appendChild(css);
 
@@ -313,24 +365,32 @@
     backdrop.innerHTML =
       '<div id="omni-fb-panel" role="dialog" aria-modal="true">' +
       '<h2>Report bug or idea</h2>' +
-      '<p class="hint">Context is captured automatically (page, device, membership). Saved to Bug Desk for the steward dashboard (also emailed as backup).</p>' +
-      '<label for="omni-fb-type">Type</label>' +
-      '<select id="omni-fb-type"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="other">Other</option></select>' +
-      '<label for="omni-fb-severity">Severity</label>' +
-      '<select id="omni-fb-severity"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option><option value="critical">Critical</option></select>' +
-      '<label for="omni-fb-title-in">Title *</label>' +
-      '<input id="omni-fb-title-in" maxlength="120" placeholder="Short summary" />' +
-      '<label for="omni-fb-desc">Details *</label>' +
-      '<textarea id="omni-fb-desc" maxlength="4000" placeholder="What happened?"></textarea>' +
-      '<label for="omni-fb-steps">Steps / Expected vs actual</label>' +
-      '<textarea id="omni-fb-steps" maxlength="2000" placeholder="1. … 2. … Expected: … Actual: …"></textarea>' +
-      '<label for="omni-fb-email">Email (recommended for follow-up)</label>' +
+      '<p class="hint">Brain-dump first. Title optional (we suggest the first line). Saved to shared Bug Desk — full text kept for steward.</p>' +
+      '<div id="omni-fb-row">' +
+      '<div><label for="omni-fb-type">Type</label>' +
+      '<select id="omni-fb-type"><option value="bug">Bug</option><option value="feature">Feature / idea</option><option value="other">Other</option></select></div>' +
+      '<div><label for="omni-fb-severity">Severity</label>' +
+      '<select id="omni-fb-severity"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option><option value="critical">Critical</option></select></div>' +
+      '</div>' +
+      '<label for="omni-fb-desc">Brain dump *</label>' +
+      '<textarea id="omni-fb-desc" placeholder="What happened? What do you wish existed? Dump freely — no need for perfect form…"></textarea>' +
+      '<div id="omni-fb-count">0 / ' +
+      BRAIN_MAX +
+      '</div>' +
+      '<label for="omni-fb-title-in">Title <span style="text-transform:none;letter-spacing:0;opacity:.8">(optional)</span></label>' +
+      '<input id="omni-fb-title-in" maxlength="120" placeholder="Leave blank to use first line of dump" />' +
+      '<div id="omni-fb-title-suggest"></div>' +
+      '<label for="omni-fb-steps">Steps / expected vs actual <span style="text-transform:none;letter-spacing:0;opacity:.8">(optional)</span></label>' +
+      '<textarea id="omni-fb-steps" placeholder="Optional structure if you want it"></textarea>' +
+      '<label for="omni-fb-email">Email (recommended)</label>' +
       '<input id="omni-fb-email" type="email" placeholder="so we can reply" />' +
       '<div id="omni-fb-ctx"></div>' +
       '<div id="omni-fb-actions">' +
       '<button type="button" id="omni-fb-submit">Send report</button>' +
       '<button type="button" id="omni-fb-gh">Also open GitHub</button>' +
-      '<a id="omni-fb-board" href="https://onemissionnetworkandinstitute.org/bug-desk-admin.html" target="_blank" rel="noopener">Bug Desk</a>' +
+      '<a id="omni-fb-board" href="' +
+      ADMIN_BASE +
+      '?site=all" target="_blank" rel="noopener">Bug Desk</a>' +
       '<button type="button" id="omni-fb-close">Close</button>' +
       '</div>' +
       '<div id="omni-fb-status"></div></div>';
@@ -338,6 +398,27 @@
 
     var cachedMembership = null;
     var cachedCtx = null;
+
+    function updateCount() {
+      var desc = document.getElementById('omni-fb-desc');
+      var countEl = document.getElementById('omni-fb-count');
+      var sug = document.getElementById('omni-fb-title-suggest');
+      var titleIn = document.getElementById('omni-fb-title-in');
+      if (!desc || !countEl) return;
+      var n = (desc.value || '').length;
+      countEl.textContent = n + ' / ' + BRAIN_MAX;
+      countEl.className = n > BRAIN_MAX ? 'over' : '';
+      if (sug) {
+        var suggested = firstLineTitle(desc.value);
+        if (!(titleIn && titleIn.value.trim()) && suggested) {
+          sug.textContent = 'Suggested title: “' + suggested.slice(0, 80) + (suggested.length > 80 ? '…' : '') + '”';
+        } else if (titleIn && titleIn.value.trim()) {
+          sug.textContent = 'Using your title.';
+        } else {
+          sug.textContent = '';
+        }
+      }
+    }
 
     function refreshContextDisplay() {
       detectMembership(function (m) {
@@ -362,7 +443,9 @@
     function open() {
       backdrop.classList.add('open');
       refreshContextDisplay();
-      document.getElementById('omni-fb-title-in').focus();
+      updateCount();
+      var d = document.getElementById('omni-fb-desc');
+      if (d) d.focus();
     }
     function close() {
       backdrop.classList.remove('open');
@@ -383,155 +466,118 @@
     backdrop.addEventListener('click', function (e) {
       if (e.target === backdrop) close();
     });
+    document.getElementById('omni-fb-desc').addEventListener('input', updateCount);
+    document.getElementById('omni-fb-title-in').addEventListener('input', updateCount);
 
     document.getElementById('omni-fb-submit').addEventListener('click', function () {
       ensureDeps(function () {
         var f = fields();
         var statusEl = document.getElementById('omni-fb-status');
-        if (!f.title || !f.desc) {
+        var title = resolveTitle(f);
+
+        if (!f.desc || f.desc.length < 10) {
           statusEl.style.color = '#fbbf24';
-          statusEl.textContent = 'Please add a title and details.';
+          statusEl.textContent = 'Brain dump at least 10 characters — dump freely.';
           return;
         }
+        if (f.desc.length > BRAIN_MAX) {
+          statusEl.style.color = '#fbbf24';
+          statusEl.textContent =
+            'Over ' + BRAIN_MAX + ' characters — trim the dump (no silent truncation). Count shows above.';
+          return;
+        }
+
         var ctx = cachedCtx || collectContext(cachedMembership || {});
         if (f.email) ctx.reporterEmail = f.email;
 
-        var item = window.OmniBugs.addInbox({
-          type: f.type,
-          severity: f.severity,
-          title: f.title,
-          description: f.desc,
-          steps: f.steps,
-          pageUrl: ctx.pageUrl,
-          pageTitle: ctx.pageTitle,
-          site: ctx.site,
-          member: ctx.member,
-          role: ctx.role,
-          userAgent: ctx.userAgent,
-          viewport: ctx.viewport,
-          reporterEmail: ctx.reporterEmail || f.email,
-          reporterName: ctx.reporterName || (f.email ? f.email.split('@')[0] : 'anonymous'),
-          reporterUserId: ctx.reporterUserId,
-          status: 'inbox',
-          priority: f.severity === 'critical' || f.severity === 'high' ? f.severity : 'medium',
-          potCents: 0,
-          donationUrl: '',
-          adminNotes: '',
-          source: 'widget',
-          context: ctx,
-        });
+        var item = window.OmniBugs
+          ? window.OmniBugs.addInbox({
+              type: f.type,
+              severity: f.severity,
+              title: title,
+              description: f.desc,
+              steps: f.steps,
+              pageUrl: ctx.pageUrl,
+              pageTitle: ctx.pageTitle,
+              site: ctx.site,
+              member: ctx.member,
+              role: ctx.role,
+              userAgent: ctx.userAgent,
+              viewport: ctx.viewport,
+              reporterEmail: ctx.reporterEmail || f.email,
+              reporterName: ctx.reporterName || (f.email ? f.email.split('@')[0] : 'anonymous'),
+              reporterUserId: ctx.reporterUserId,
+              status: 'inbox',
+              priority: f.severity === 'critical' || f.severity === 'high' ? f.severity : 'medium',
+              potCents: 0,
+              source: 'widget',
+              context: ctx,
+            })
+          : { id: 'local_' + Date.now().toString(36), reporterName: 'Guest' };
+
+        // Use resolved title for durable post
+        f.title = title;
 
         statusEl.style.color = '#94a3b8';
         statusEl.textContent = 'Saving to Bug Desk…';
 
-        // 1) Primary: multi-site Bug Desk (powers Cmd Cntr + steward dashboard)
         postToBugDesk(f, ctx, item)
           .then(function (saved) {
+            // Green only when durable Bug Desk returns bug_* id (not local INB-*)
+            var deskId = saved && saved.id ? String(saved.id) : '';
+            if (!deskId || deskId.indexOf('bug_') !== 0) {
+              throw new Error('No durable bug_* id from Bug Desk');
+            }
+            var siteLabel = (saved && saved.siteId) || siteIdFromCtx(ctx.site);
             statusEl.style.color = '#34d399';
-            var deskId = (saved && saved.id) || item.id;
             statusEl.innerHTML =
-              'Saved to Bug Desk (' +
+              'Saved <strong style="color:#a7f3d0">' +
               deskId +
-              '). <a href="https://onemissionnetworkandinstitute.org/bug-desk-admin.html" target="_blank" rel="noopener" style="color:#6ee7b7;text-decoration:underline">Open dashboard</a>';
-            // 2) Also mirror to Azure ServiceFeedback (non-blocking)
-            postToAzure(f, ctx, item).catch(function () {});
-            // 3) Backup notify steward by email (non-blocking)
-            try {
-              var endpoint =
-                (window.OMNI_SITE && window.OMNI_SITE.formSubmitEndpoint) ||
-                'https://formsubmit.co/ajax/techsupport@onemissionnetworkandinstitute.org';
-              var fd = new FormData();
-              fd.append(
-                '_subject',
-                '[OMNI ' + f.type + '][' + ctx.site + '][' + (ctx.member ? 'member' : 'guest') + '] ' + f.title
-              );
-              fd.append('_template', 'table');
-              fd.append('_captcha', 'false');
-              fd.append('type', f.type);
-              fd.append('severity', f.severity);
-              fd.append('title', f.title);
-              fd.append('message', f.desc);
-              fd.append('steps', f.steps || '');
-              fd.append('page', ctx.pageUrl);
-              fd.append('site', ctx.site);
-              fd.append('member', ctx.member ? 'yes' : 'no');
-              fd.append('bug_desk_id', deskId);
-              fd.append('local_id', item.id);
-              fd.append('email', ctx.reporterEmail || f.email || 'anonymous@feedback.local');
-              fd.append('name', item.reporterName);
-              fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).catch(function () {});
-            } catch (e) {}
+              '</strong> · ' +
+              siteLabel +
+              '. Full dump is in Bug Desk for the steward.';
+            // Short steward email only after durable success
+            emailShortNotify(f, ctx, deskId, title);
+            setTimeout(function () {
+              try {
+                close();
+              } catch (e) {}
+            }, 2800);
           })
-          .catch(function () {
-            // Bug Desk failed — try Azure then FormSubmit
+          .catch(function (err) {
+            var why = err && err.message ? err.message : 'unknown';
             statusEl.style.color = '#94a3b8';
-            statusEl.textContent = 'Bug Desk unavailable — trying backup store…';
-            return postToAzure(f, ctx, item).then(function (saved) {
-              statusEl.style.color = '#34d399';
-              statusEl.textContent =
-                'Saved to backup store (' +
-                ((saved && saved.id) || item.id) +
-                ').';
-            });
-          })
-          .catch(function () {
-            // Azure failed — fall back to FormSubmit / mailto so the report is not lost
-            statusEl.style.color = '#94a3b8';
-            statusEl.textContent = 'Durable store unavailable — sending email…';
-            var endpoint =
-              (window.OMNI_SITE && window.OMNI_SITE.formSubmitEndpoint) ||
-              'https://formsubmit.co/ajax/techsupport@onemissionnetworkandinstitute.org';
-            var fd = new FormData();
-            fd.append(
-              '_subject',
-              '[OMNI ' + f.type + '][' + ctx.site + '][' + (ctx.member ? 'member' : 'guest') + '] ' + f.title
-            );
-            fd.append('_template', 'table');
-            fd.append('_captcha', 'false');
-            fd.append('type', f.type);
-            fd.append('severity', f.severity);
-            fd.append('title', f.title);
-            fd.append('message', f.desc);
-            fd.append('steps', f.steps || '');
-            fd.append('page', ctx.pageUrl);
-            fd.append('site', ctx.site);
-            fd.append('member', ctx.member ? 'yes' : 'no');
-            fd.append('local_id', item.id);
-            fd.append('email', ctx.reporterEmail || f.email || 'anonymous@feedback.local');
-            fd.append('name', item.reporterName);
-            fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
+            statusEl.textContent = 'Bug Desk failed (' + why + ') — sending full report by email…';
+            emailFullFallback(f, ctx, item, title)
               .then(function (r) {
-                if (!r.ok) throw new Error('send failed');
-                statusEl.style.color = '#34d399';
-                statusEl.textContent = 'Sent via email (' + item.id + ').';
+                if (!r || !r.ok) throw new Error('email failed');
+                statusEl.style.color = '#fbbf24';
+                statusEl.textContent =
+                  'Email failsafe sent with full dump. Not yet a durable bug_* id — steward will re-enter.';
               })
               .catch(function () {
-                var subject = encodeURIComponent('[OMNI ' + f.type + '][' + ctx.site + '] ' + f.title);
+                statusEl.style.color = '#fbbf24';
+                var mailTo =
+                  (window.OMNI_SITE &&
+                    (window.OMNI_SITE.contactEmail || window.OMNI_SITE.techsupportEmail)) ||
+                  'techsupport@onemissionnetworkandinstitute.org';
+                var subject = encodeURIComponent('[OMNI ' + f.type + '][' + ctx.site + '] ' + title);
                 var body = encodeURIComponent(
-                  'ID: ' +
-                    item.id +
-                    '\nType: ' +
-                    f.type +
-                    '\nSeverity: ' +
-                    f.severity +
-                    '\nSite: ' +
+                  'Site: ' +
                     ctx.site +
-                    '\nMember: ' +
-                    (ctx.member ? 'yes' : 'no') +
-                    '\nPage: ' +
-                    ctx.pageUrl +
                     '\n\n' +
                     f.desc +
                     '\n\nSteps:\n' +
-                    (f.steps || '—') +
-                    '\n\nFrom: ' +
-                    (ctx.reporterEmail || f.email || 'anonymous')
+                    (f.steps || '—')
                 );
-                statusEl.style.color = '#fbbf24';
-                statusEl.textContent = 'Opening email app…';
-                var mailTo = (window.OMNI_SITE && (window.OMNI_SITE.contactEmail || window.OMNI_SITE.techsupportEmail)) || 'techsupport@onemissionnetworkandinstitute.org';
-                window.location.href =
-                  'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
+                statusEl.innerHTML =
+                  'Could not reach Bug Desk. <a href="mailto:' +
+                  mailTo +
+                  '?subject=' +
+                  subject +
+                  '&body=' +
+                  body +
+                  '" style="color:#fde68a;text-decoration:underline">Email full dump</a> (page stays put).';
               });
           });
       });
@@ -541,21 +587,27 @@
       ensureDeps(function () {
         var f = fields();
         var statusEl = document.getElementById('omni-fb-status');
-        if (!f.title || !f.desc) {
+        if (!f.desc || f.desc.length < 10) {
           statusEl.style.color = '#fbbf24';
-          statusEl.textContent = 'Please add a title and details first.';
+          statusEl.textContent = 'Add a brain dump first.';
           return;
         }
+        if (f.desc.length > BRAIN_MAX) {
+          statusEl.style.color = '#fbbf24';
+          statusEl.textContent = 'Over limit — trim before GitHub.';
+          return;
+        }
+        var title = resolveTitle(f);
         var ctx = cachedCtx || collectContext(cachedMembership || {});
         if (f.email) ctx.reporterEmail = f.email;
-        var url = githubNewIssueUrl(f.type, f.title, f.desc, f.steps, f.severity, ctx);
+        var url = githubNewIssueUrl(f.type, title, f.desc, f.steps, f.severity, ctx);
         if (!url) {
           statusEl.textContent = 'GitHub config missing.';
           return;
         }
         window.open(url, '_blank', 'noopener');
         statusEl.style.color = '#34d399';
-        statusEl.textContent = 'GitHub form opened with full context + labels (site / member). Submit there for the tracker.';
+        statusEl.textContent = 'GitHub form opened with full dump.';
       });
     });
   }

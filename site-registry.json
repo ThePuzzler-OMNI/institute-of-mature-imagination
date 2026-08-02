@@ -4,7 +4,7 @@
   "domain": "https://instituteofmatureimagination.org",
   "og_dir": "images/og",
   "og_path_prefix": "/images/og/",
-  "og_cache_bust": "20260802c",
+  "og_cache_bust": "20260802d",
   "theme": "imi-void",
   "chrome": {
     "mark": "IMI",
@@ -35,8 +35,8 @@
       "id": "about",
       "file": "about.html",
       "path": "/about",
-      "title": "About IMI",
-      "subtitle": "Father's idea · public record",
+      "title": "Institute of Mature Imagination",
+      "subtitle": "About · Father's idea · public record",
       "description": "What the Institute of Mature Imagination is and why the archive exists.",
       "og_slug": "about",
       "public": true
@@ -46,8 +46,8 @@
       "file": "videos.html",
       "path": "/videos",
       "title": "OMNI Videos",
-      "subtitle": "Spaces and talks",
-      "description": "Video library linked from IMI and One Mission.",
+      "subtitle": "Institute of Mature Imagination · Spaces and talks",
+      "description": "Video library linked from Institute of Mature Imagination and One Mission.",
       "og_slug": "videos",
       "public": true
     }

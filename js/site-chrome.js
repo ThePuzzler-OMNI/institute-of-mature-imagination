@@ -45,17 +45,17 @@
       })
       .join('');
     return (
-      '<div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">' +
+      '<div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-3">' +
       '<a href="' +
       esc(chrome.home_href || 'index.html') +
-      '" class="flex items-center gap-2 text-star font-semibold">' +
-      '<span class="w-8 h-8 rounded-lg glass flex items-center justify-center text-xs text-accent">' +
+      '" class="flex items-center gap-2 text-star font-semibold min-w-0" title="Institute of Mature Imagination">' +
+      '<span class="w-8 h-8 shrink-0 rounded-lg glass flex items-center justify-center text-xs text-accent">' +
       esc(chrome.mark || 'IMI') +
-      '</span><span>IMI</span></a>' +
-      '<nav class="hidden md:flex items-center gap-5">' +
+      '</span><span class="text-sm sm:text-base leading-snug truncate">Institute of Mature Imagination</span></a>' +
+      '<nav class="hidden md:flex items-center gap-5 shrink-0">' +
       desktop +
       '</nav>' +
-      '<button type="button" id="imi-nav-toggle" class="md:hidden text-star p-2" aria-label="Menu" aria-controls="imi-mobile-menu">☰</button>' +
+      '<button type="button" id="imi-nav-toggle" class="md:hidden text-star p-2 shrink-0" aria-label="Menu" aria-controls="imi-mobile-menu">☰</button>' +
       '</div><div id="imi-mobile-menu" class="hidden md:hidden border-t border-white/10 px-4 py-3 space-y-1">' +
       mobile +
       '</div>'
