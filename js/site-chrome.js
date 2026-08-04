@@ -1,9 +1,13 @@
 /**
- * IMI — shared header/footer from site-registry.json (public web discipline).
+ * IMI — shared header/footer (network chrome contract 2026-08-04).
+ * Same structure as Intek / Foundation / Exchange; IMI color tokens via site CSS.
  */
 (function () {
   if (window.__imiSiteChrome) return;
   window.__imiSiteChrome = true;
+
+  var HAMBURGER =
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
 
   function year() {
     return new Date().getFullYear();
@@ -36,7 +40,7 @@
         return (
           '<a href="' +
           esc(item.href) +
-          '" class="block px-3 py-2 rounded-lg hover:bg-white/5"' +
+          '" class="block px-5 py-3 text-sm text-star/80 border-b border-white/10 hover:bg-white/5 hover:text-star"' +
           ext +
           '>' +
           esc(item.label) +
@@ -49,13 +53,13 @@
       chrome.brand_secondary ||
       "In memory of a father's idea · stewarded for the public";
     return (
-      '<div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">' +
+      '<div class="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between gap-3">' +
       '<a href="' +
       esc(chrome.home_href || 'index.html') +
-      '" class="flex items-center gap-2 text-star font-semibold min-w-0" title="' +
+      '" class="flex items-center gap-3 text-star font-semibold min-w-0" title="' +
       esc(primary + ' — ' + secondary) +
       '">' +
-      '<span class="w-8 h-8 shrink-0 rounded-lg glass flex items-center justify-center text-xs text-accent">' +
+      '<span class="w-8 h-8 shrink-0 rounded-full glass flex items-center justify-center text-xs text-accent border border-white/10">' +
       esc(chrome.mark || 'IMI') +
       '</span><span class="flex flex-col leading-tight min-w-0">' +
       '<span class="text-sm sm:text-base leading-snug truncate">' +
@@ -64,11 +68,13 @@
       '<span class="text-[10px] sm:text-[11px] font-normal text-glow/80 tracking-wide truncate">' +
       esc(secondary) +
       '</span></span></a>' +
-      '<nav class="hidden md:flex items-center gap-5 shrink-0">' +
+      '<nav class="hidden md:flex items-center gap-5 shrink-0" aria-label="Primary">' +
       desktop +
       '</nav>' +
-      '<button type="button" id="imi-nav-toggle" class="md:hidden text-star p-2 shrink-0" aria-label="Menu" aria-controls="imi-mobile-menu">☰</button>' +
-      '</div><div id="imi-mobile-menu" class="hidden md:hidden border-t border-white/10 px-4 py-3 space-y-1">' +
+      '<button type="button" id="net-nav-toggle" class="md:hidden inline-flex w-10 h-10 items-center justify-center rounded-full border border-white/15 text-star bg-transparent cursor-pointer" aria-label="Open menu" aria-expanded="false" aria-controls="net-mobile-menu">' +
+      HAMBURGER +
+      '</button></div>' +
+      '<div id="net-mobile-menu" class="hidden md:hidden border-t border-white/10 bg-void/95">' +
       mobile +
       '</div>'
     );
@@ -86,12 +92,31 @@
         );
       })
       .join(' · ');
+    var local = (chrome.nav || [])
+      .filter(function (n) {
+        return !n.external;
+      })
+      .slice(0, 5)
+      .map(function (n) {
+        return (
+          '<a href="' +
+          esc(n.href) +
+          '" class="hover:text-star">' +
+          esc(n.label) +
+          '</a>'
+        );
+      })
+      .join(' · ');
     return (
-      '<div class="max-w-5xl mx-auto px-4 py-10 text-sm text-star/60 space-y-3">' +
+      '<div class="max-w-5xl mx-auto px-5 py-10 text-sm text-star/60 space-y-4">' +
+      '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">' +
       '<div>© <span id="y">' +
       year() +
       '</span> Institute of Mature Imagination</div>' +
-      '<div>Sister network: ' +
+      '<div class="flex flex-wrap gap-x-2 gap-y-1 text-xs">' +
+      local +
+      '</div></div>' +
+      '<div class="text-xs">Sister network: ' +
       sisters +
       '</div>' +
       '<p class="text-xs text-glow/70">' +
@@ -106,11 +131,22 @@
   }
 
   function bindMobile() {
-    var btn = document.getElementById('imi-nav-toggle');
-    var menu = document.getElementById('imi-mobile-menu');
+    var btn = document.getElementById('net-nav-toggle');
+    var menu = document.getElementById('net-mobile-menu');
     if (!btn || !menu) return;
-    btn.addEventListener('click', function () {
-      menu.classList.toggle('hidden');
+    function setOpen(o) {
+      menu.classList.toggle('hidden', !o);
+      btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+      btn.setAttribute('aria-label', o ? 'Close menu' : 'Open menu');
+    }
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      setOpen(menu.classList.contains('hidden'));
+    });
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        setOpen(false);
+      });
     });
   }
 
@@ -120,6 +156,7 @@
     if (!headers.length) {
       var h = document.createElement('header');
       h.className = 'sticky top-0 z-40 glass';
+      h.setAttribute('data-site-chrome', 'ready');
       h.innerHTML = buildHeader(chrome);
       document.body.insertBefore(h, document.body.firstChild);
     } else {
@@ -136,6 +173,7 @@
     if (!footers.length) {
       var f = document.createElement('footer');
       f.className = 'mt-16 border-t border-white/10';
+      f.setAttribute('data-site-chrome', 'ready');
       f.innerHTML = buildFooter(chrome);
       document.body.appendChild(f);
     } else {
@@ -161,6 +199,9 @@
       });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
