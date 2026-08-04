@@ -19,7 +19,9 @@
     ],
     "sister_links": [
       { "href": "https://onemissionnetworkandinstitute.org/", "label": "One Mission" },
-      { "href": "https://intekspace.com/", "label": "Intek Space" }
+      { "href": "https://intekspace.com/", "label": "Intek Space" },
+      { "href": "https://onemissionfoundation.org/", "label": "Foundation" },
+      { "href": "https://omniexchange.org/", "label": "Exchange" }
     ]
   },
   "pages": [
