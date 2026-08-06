@@ -1,5 +1,8 @@
 {
   "schema": "omni-public-web-registry/v1",
+  "kit": "network-template-kit-v1",
+  "kit_adopt": "Q-NET-ADOPT-IMI",
+  "kit_adopted": "2026-08-05",
   "brand": "imi",
   "domain": "https://instituteofmatureimagination.org",
   "og_dir": "images/og",
@@ -11,6 +14,7 @@
     "home_href": "index.html",
     "brand_primary": "Institute of Mature Imagination",
     "brand_secondary": "In memory of a father's idea · stewarded for the public",
+    "accent": "imi",
     "nav": [
       { "href": "about.html", "label": "About" },
       { "href": "index.html#archive", "label": "Archive" },

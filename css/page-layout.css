@@ -1,0 +1,49 @@
+/* IMI — network template kit v1 (Q-NET-ADOPT-IMI 2026-08-05)
+   Layout shells without depending on Tailwind CDN for max-width.
+   Brand: void / accent violet / glow cyan (not hive gold, not apple red). */
+
+:root {
+  --void: #07060f;
+  --nebula: #1a1040;
+  --star: #e8e4ff;
+  --accent: #8b5cf6;
+  --glow: #22d3ee;
+
+  /* Kit shells */
+  --page-max: 56rem;
+  --page-max-prose: 48rem;
+  --page-pad: 1.25rem;
+  --header-h: 3.5rem;
+  --bp-md: 768px;
+  --z-header: 40;
+  --section-gap: 3rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Optional helpers if pages drop Tailwind for shells later */
+.max-w-4xl,
+.max-w-5xl {
+  max-width: var(--page-max);
+  width: 100%;
+}
+.max-w-3xl {
+  max-width: var(--page-max-prose);
+  width: 100%;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.px-5 {
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
+}

@@ -1,12 +1,26 @@
 # Institute of Mature Imagination (IMI)
 
 **Domain:** https://instituteofmatureimagination.org (also .com)  
-**Path on PC:** `sites/imi/` under One Mission Grok workspace  
-**GitHub (when created):** `ThePuzzler-OMNI/institute-of-mature-imagination`
+**Path on PC:** `product/_w2_push/imi/`  
+**GitHub:** `ThePuzzler-OMNI/institute-of-mature-imagination`
 
 ## What this is
 
 Searchable, trustworthy archive surface for **X Spaces** and public conversation records — father's idea, stewarded by thePuzzler. Sister to One Mission and Intek Space.
+
+## Network template kit (Q-NET-ADOPT-IMI · 2026-08-05)
+
+Aligned to `product/docs/NETWORK_TEMPLATE_KIT_v1_2026-08-05.md`:
+
+| Rule | IMI |
+|------|-----|
+| `--page-max: 56rem` | `css/page-layout.css` |
+| Explicit chrome CSS | `js/site-chrome.js` (not Tailwind-only hamburger) |
+| Desktop hamburger always on | yes |
+| Sisters omit self | registry + runtime filter |
+| Accent | void / violet accent / cyan glow (not hive, not apple) |
+
+Smoke: https://instituteofmatureimagination.org/ · desktop hamburger · Escape closes menu · footer sisters = OM · Intek · Foundation · Exchange (no IMI self).
 
 ## Status
 
