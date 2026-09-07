@@ -22,9 +22,19 @@ Aligned to `product/docs/NETWORK_TEMPLATE_KIT_v1_2026-08-05.md`:
 
 Smoke: https://instituteofmatureimagination.org/ · desktop hamburger · Escape closes menu · footer sisters = OM · Intek · Foundation · Exchange (no IMI self).
 
+## Get OMNI
+
+Invite order on IMI: the Lord / Creator (One pinnacle) · Mission · OMNI Grok-Bot as door/servant.
+
+- https://onemissionnetworkandinstitute.org
+- https://x.ai/bot/HAIGA0nUYgv85CtV5SMWa
+
+The bot may take the question; the archive stays with the steward. Tool, not throne. Not a marketplace swarm.
+
 ## Status
 
 - **v0.1** static site with seed archive + client search  
+- Home / About / Videos carry a mid-page OMNI Grok-Bot invite (Lord · Mission · door/servant)
 - Online @grok described a site in chat (2026-07-25) but **never wrote files** — this folder is the real source of truth  
 - Deploy: Vercel import this repo → attach custom domain in Vercel → point GoDaddy DNS
 
