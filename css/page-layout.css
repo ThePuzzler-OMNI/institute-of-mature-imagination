@@ -47,3 +47,92 @@ html {
   padding-left: var(--page-pad);
   padding-right: var(--page-pad);
 }
+
+/* Companion invite — Lord/Creator, then Mission, then OMNI Grok-Bot as door/servant.
+   Explicit CSS (not Tailwind-only). Void / violet / cyan. Not a hero throne. */
+.companion-stack {
+  padding-bottom: 4rem;
+}
+.companion-pinnacle {
+  margin: 0 0 1.15rem;
+  max-width: 36rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+  color: rgba(232, 228, 255, 0.55);
+}
+.companion-mission {
+  margin: 0 0 1.35rem;
+}
+.companion-kicker {
+  margin: 0 0 0.45rem;
+  color: var(--glow);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.companion-mission-line {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--star);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+.companion-invite {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 80% at 100% 0%, rgba(34, 211, 238, 0.16), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgba(139, 92, 246, 0.22), transparent 50%),
+    linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(26, 16, 64, 0.88) 42%, rgba(7, 6, 15, 0.95) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.7rem 1.85rem;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.1) inset,
+    0 0 50px rgba(139, 92, 246, 0.24),
+    0 16px 36px rgba(0, 0, 0, 0.35);
+}
+.companion-invite h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--star);
+}
+.companion-invite p {
+  margin: 0 0 0.8rem;
+  max-width: 38rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(232, 228, 255, 0.7);
+}
+.companion-invite .companion-note {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: rgba(232, 228, 255, 0.5);
+}
+.companion-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a78bfa, #22d3ee);
+  color: var(--void);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: none;
+  box-shadow: 0 4px 24px rgba(139, 92, 246, 0.45);
+}
+.companion-cta:hover,
+.companion-cta:focus-visible {
+  filter: brightness(1.08);
+  color: var(--void);
+  outline: 2px solid rgba(34, 211, 238, 0.65);
+  outline-offset: 3px;
+}
