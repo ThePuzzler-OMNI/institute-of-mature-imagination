@@ -19,7 +19,8 @@
       { "href": "about.html", "label": "About" },
       { "href": "index.html#archive", "label": "Archive" },
       { "href": "videos.html", "label": "Videos" },
-      { "href": "https://onemissionnetworkandinstitute.org/forge.html", "label": "Vision", "external": true }
+      { "href": "https://onemissionnetworkandinstitute.org/forge", "label": "Forge" },
+      { "href": "https://onemissionnetworkandinstitute.org/vision-load?site=imi", "label": "Vision", "external": true }
     ],
     "sister_links": [
       { "href": "https://onemissionnetworkandinstitute.org/", "label": "One Mission" },

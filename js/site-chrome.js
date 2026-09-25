@@ -109,8 +109,9 @@
   function navLinks(chrome) {
     return (chrome.nav || [])
       .map(function (item) {
-        var ext = item.external ? ' target="_blank" rel="noopener"' : '';
-        return '<a href="' + esc(item.href) + '"' + ext + '>' + esc(item.label) + '</a>';
+        // Same-tab to the real href. A new-tab + noopener launch was
+        // leaving Forge on a blank document (dead launch) from IMI.
+        return '<a href="' + esc(item.href) + '">' + esc(item.label) + '</a>';
       })
       .join('');
   }
@@ -299,8 +300,9 @@
         { href: 'about.html', label: 'About' },
         { href: 'index.html#archive', label: 'Archive' },
         { href: 'videos.html', label: 'Videos' },
+        { href: 'https://onemissionnetworkandinstitute.org/forge', label: 'Forge' },
         {
-          href: 'https://onemissionnetworkandinstitute.org/forge.html',
+          href: 'https://onemissionnetworkandinstitute.org/vision-load?site=imi',
           label: 'Vision',
           external: true,
         },
