@@ -136,3 +136,54 @@ html {
   outline: 2px solid rgba(34, 211, 238, 0.65);
   outline-offset: 3px;
 }
+
+/* Soft Mirror door — indigo ghost chip, quieter than the Get OMNI button. */
+.companion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.mirror-door {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  background: rgba(79, 70, 229, 0.1);
+  color: #c7d2fe;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: rgba(99, 102, 241, 0.28);
+  touch-action: manipulation;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+.mirror-door:hover {
+  color: #eef2ff;
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(165, 180, 252, 0.72);
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.28), 0 0 16px rgba(99, 102, 241, 0.38);
+}
+.mirror-door:focus {
+  outline: 2px solid #c7d2fe;
+  outline-offset: 3px;
+}
+.mirror-door:focus:not(:focus-visible) {
+  outline: none;
+}
+.mirror-door:focus-visible {
+  color: #eef2ff;
+  background: rgba(99, 102, 241, 0.22);
+  border-color: rgba(165, 180, 252, 0.75);
+  outline: 2px solid #c7d2fe;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.35), 0 0 18px rgba(99, 102, 241, 0.45);
+}

@@ -42,6 +42,24 @@
   var HAMBURGER =
     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
 
+  var MIRROR_URL = 'https://omni-mindmap.vercel.app/mirror/soul-time/?door=imi';
+  var MIRROR_ARIA = 'Open Mirror Soul-time (opens in new tab)';
+
+  function mirrorLink(label, extraClass) {
+    var cls = 'mirror-door' + (extraClass ? ' ' + extraClass : '');
+    return (
+      '<a class="' +
+      cls +
+      '" href="' +
+      MIRROR_URL +
+      '" target="_blank" rel="noopener" aria-label="' +
+      MIRROR_ARIA +
+      '">' +
+      esc(label) +
+      '</a>'
+    );
+  }
+
   var CHROME_CSS =
     'header[data-site-chrome="ready"]{border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;z-index:var(--z-header,40);background:rgba(7,6,15,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}' +
     '.net-bar{max-width:var(--page-max,56rem);margin:0 auto;padding:0 var(--page-pad,1.25rem);height:var(--header-h,3.5rem);display:flex;align-items:center;justify-content:space-between;gap:0.75rem;}' +
@@ -50,6 +68,12 @@
     '.net-title{font-weight:600;font-size:0.8rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}' +
     '.net-sub{font-size:10px;color:rgba(34,211,238,0.75);letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}' +
     '.net-actions{display:flex;align-items:center;gap:0.75rem;flex-shrink:0;}' +
+    '.net-brand>span:last-child{min-width:0;overflow:hidden;}' +
+    '.net-foot a.mirror-door{color:#c7d2fe;}' +
+    '.net-foot a.mirror-door:hover,.net-foot a.mirror-door:focus-visible{color:#eef2ff;}' +
+    '.net-foot-door{margin-top:0.85rem;}' +
+    '#net-mobile-menu a.mirror-door{display:inline-flex;align-items:center;width:auto;max-width:calc(100% - 1.7rem);margin:0.55rem 0.85rem;padding:0.4rem 0.95rem;border-radius:999px;border:1px solid rgba(129,140,248,0.45);border-bottom:1px solid rgba(129,140,248,0.45);background:rgba(79,70,229,0.14);color:#c7d2fe;text-decoration:none;}' +
+    '#net-mobile-menu a.mirror-door:hover,#net-mobile-menu a.mirror-door:focus-visible{color:#eef2ff;background:rgba(99,102,241,0.24);border-color:rgba(165,180,252,0.75);box-shadow:0 0 0 1px rgba(129,140,248,0.3),0 0 16px rgba(99,102,241,0.4);outline:2px solid #c7d2fe;outline-offset:3px;}' +
     '.net-nav-desktop{display:none;flex-wrap:wrap;justify-content:flex-end;gap:1.1rem;font-size:0.875rem;}' +
     '.net-nav-desktop a{color:rgba(232,228,255,0.8);text-decoration:none;}' +
     '.net-nav-desktop a:hover{color:#e8e4ff;}' +
@@ -115,11 +139,13 @@
       '<nav class="net-nav-desktop" aria-label="Primary">' +
       navLinks(chrome) +
       '</nav>' +
+      mirrorLink('open Mirror', 'mirror-door--bar') +
       '<button type="button" id="net-nav-toggle" class="net-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="net-mobile-menu">' +
       HAMBURGER +
       '</button></div></div>' +
       '<div id="net-mobile-menu" role="navigation" aria-label="Mobile">' +
       navLinks(chrome) +
+      mirrorLink('Mirror · Soul-time', 'mirror-door--menu') +
       '</div>'
     );
   }
@@ -157,6 +183,9 @@
       '<div style="font-size:0.75rem">' +
       local +
       '</div></div>' +
+      '<div class="net-foot-door">' +
+      mirrorLink('Mirror · Soul-time') +
+      '</div>' +
       '<div class="net-foot-sisters">Sister network: ' +
       (sisters || '—') +
       '</div>' +
@@ -202,6 +231,26 @@
     });
   }
 
+  function placeCompanionDoors() {
+    var ctas = document.querySelectorAll('a.companion-cta');
+    for (var i = 0; i < ctas.length; i++) {
+      var cta = ctas[i];
+      var parent = cta.parentNode;
+      if (!parent) continue;
+      if (parent.classList && parent.classList.contains('companion-actions')) {
+        if (!parent.querySelector('a.mirror-door')) {
+          cta.insertAdjacentHTML('afterend', mirrorLink('Mirror · Soul-time'));
+        }
+        continue;
+      }
+      var row = document.createElement('div');
+      row.className = 'companion-actions';
+      parent.insertBefore(row, cta);
+      row.appendChild(cta);
+      row.insertAdjacentHTML('beforeend', mirrorLink('Mirror · Soul-time'));
+    }
+  }
+
   function apply(reg) {
     ensureCss();
     var chrome = reg.chrome || {};
@@ -236,6 +285,7 @@
         f.innerHTML = buildFooter(chrome);
       });
     }
+    placeCompanionDoors();
   }
 
   var FALLBACK_CHROME = {
