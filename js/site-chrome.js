@@ -299,6 +299,7 @@
         { href: 'about.html', label: 'About' },
         { href: 'index.html#archive', label: 'Archive' },
         { href: 'videos.html', label: 'Videos' },
+        { href: 'video-contracts.html', label: 'Contracts' },
         {
           href: 'https://onemissionnetworkandinstitute.org/forge.html',
           label: 'Vision',

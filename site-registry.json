@@ -19,6 +19,7 @@
       { "href": "about.html", "label": "About" },
       { "href": "index.html#archive", "label": "Archive" },
       { "href": "videos.html", "label": "Videos" },
+      { "href": "video-contracts.html", "label": "Contracts" },
       { "href": "https://onemissionnetworkandinstitute.org/forge.html", "label": "Vision", "external": true }
     ],
     "sister_links": [
@@ -56,6 +57,16 @@
       "title": "Videos",
       "subtitle": "Spaces and talks",
       "description": "Video library linked from Institute of Mature Imagination and One Mission.",
+      "og_slug": "videos",
+      "public": true
+    },
+    {
+      "id": "video-contracts",
+      "file": "video-contracts.html",
+      "path": "/video-contracts",
+      "title": "Contracts",
+      "subtitle": "Consent, summary, and the video",
+      "description": "Public video contracts for Exchange shipments. Member IDs only. Consent to record, a written summary, and the video — labeled instruments, not legal advice.",
       "og_slug": "videos",
       "public": true
     }
