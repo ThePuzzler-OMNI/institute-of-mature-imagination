@@ -7,6 +7,10 @@
       "destination": "/videos.html"
     },
     {
+      "source": "/video-contracts",
+      "destination": "/video-contracts.html"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     }
