@@ -300,6 +300,7 @@
         { href: 'index.html#archive', label: 'Archive' },
         { href: 'videos.html', label: 'Videos' },
         { href: 'video-contracts.html', label: 'Contracts' },
+        { href: 'posts.html', label: 'Posts' },
         {
           href: 'https://onemissionnetworkandinstitute.org/forge.html',
           label: 'Vision',
