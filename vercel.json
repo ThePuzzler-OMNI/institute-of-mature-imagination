@@ -11,6 +11,10 @@
       "destination": "/video-contracts.html"
     },
     {
+      "source": "/posts",
+      "destination": "/posts.html"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     }
