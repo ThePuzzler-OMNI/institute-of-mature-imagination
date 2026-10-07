@@ -21,7 +21,7 @@
       { "href": "videos.html", "label": "Videos" },
       { "href": "video-contracts.html", "label": "Contracts" },
       { "href": "posts.html", "label": "Posts" },
-      { "href": "https://onemissionnetworkandinstitute.org/forge.html", "label": "Vision", "external": true },
+      { "href": "https://onemissionnetworkandinstitute.org/vision-load?site=imi", "label": "Vision", "external": true },
       { "href": "https://onemissionnetworkandinstitute.org/join", "label": "Join", "external": true }
     ],
     "sister_links": [
