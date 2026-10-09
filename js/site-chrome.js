@@ -195,6 +195,7 @@
       '<p class="net-foot-note">Archive stewarded for the public record. · kit ' +
       KIT +
       '</p>' +
+      '<p class="net-foot-note">Privacy &amp; analytics. This site uses Google Analytics 4 to understand traffic. We do not use this tag to collect names, emails, or phone numbers from forms. Google may process data per <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s Privacy Policy</a>. Questions: <a href="https://x.com/omni_puzzler" target="_blank" rel="noopener">@omni_puzzler</a>.</p>' +
       '</div>'
     );
   }
@@ -302,10 +303,11 @@
         { href: 'video-contracts.html', label: 'Contracts' },
         { href: 'posts.html', label: 'Posts' },
         {
-          href: 'https://onemissionnetworkandinstitute.org/forge.html',
+          href: 'https://onemissionnetworkandinstitute.org/vision-load?site=imi',
           label: 'Vision',
           external: true,
         },
+        { href: 'https://onemissionnetworkandinstitute.org/join', label: 'Join', external: true },
       ],
       sister_links: [
         { href: 'https://onemissionnetworkandinstitute.org/', label: 'One Mission' },

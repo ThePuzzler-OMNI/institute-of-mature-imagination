@@ -612,21 +612,9 @@
     });
   }
 
-  function loadSupportWidget() {
-    if (window.__omniSupportLoaded || window.OMNI_SUPPORT) return;
-    var s = document.createElement('script');
-    s.src = 'js/support-widget.js';
-    s.defer = true;
-    document.head.appendChild(s);
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      inject();
-      loadSupportWidget();
-    });
+    document.addEventListener('DOMContentLoaded', inject);
   } else {
     inject();
-    loadSupportWidget();
   }
 })();
