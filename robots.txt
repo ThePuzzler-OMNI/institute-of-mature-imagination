@@ -1,5 +1,7 @@
 # https://instituteofmatureimagination.org/robots.txt
 User-agent: *
 Allow: /
+Disallow: /archive
+Disallow: /api/archive
 
 Sitemap: https://instituteofmatureimagination.org/sitemap.xml

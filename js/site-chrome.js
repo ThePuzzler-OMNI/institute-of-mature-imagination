@@ -302,6 +302,7 @@
         { href: 'videos.html', label: 'Videos' },
         { href: 'video-contracts.html', label: 'Contracts' },
         { href: 'posts.html', label: 'Posts' },
+        { href: '/spaces', label: 'Spaces' },
         {
           href: 'https://onemissionnetworkandinstitute.org/vision-load?site=imi',
           label: 'Vision',
