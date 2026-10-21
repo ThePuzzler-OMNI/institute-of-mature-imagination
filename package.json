@@ -1,0 +1,16 @@
+{
+  "name": "institute-of-mature-imagination",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "verify": "node scripts/verify-archive.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.2",
+    "@vercel/functions": "^3.10.1"
+  }
+}

@@ -1,6 +1,14 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "proxy": {
+    "entrypoint": "proxy.js"
+  },
+  "functions": {
+    "api/archive.js": {
+      "maxDuration": 300
+    }
+  },
   "rewrites": [
     {
       "source": "/videos",
@@ -17,6 +25,34 @@
     {
       "source": "/about",
       "destination": "/about.html"
+    },
+    {
+      "source": "/api/archive/ingest",
+      "destination": "/api/archive?route=ingest"
+    },
+    {
+      "source": "/api/archive/audio/:id",
+      "destination": "/api/archive?route=audio&audience=owner&id=:id"
+    },
+    {
+      "source": "/api/spaces/audio/:id",
+      "destination": "/api/archive?route=audio&audience=public&id=:id"
+    },
+    {
+      "source": "/archive",
+      "destination": "/api/archive?route=page&section=archive"
+    },
+    {
+      "source": "/archive/:id",
+      "destination": "/api/archive?route=page&section=archive&id=:id"
+    },
+    {
+      "source": "/spaces",
+      "destination": "/api/archive?route=page&section=spaces"
+    },
+    {
+      "source": "/spaces/:id",
+      "destination": "/api/archive?route=page&section=spaces&id=:id"
     }
   ],
   "headers": [
@@ -63,6 +99,34 @@
           "key": "Content-Type",
           "value": "application/xml; charset=utf-8"
         }
+      ]
+    },
+    {
+      "source": "/archive",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "private, no-store" }
+      ]
+    },
+    {
+      "source": "/archive/:path*",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "private, no-store" }
+      ]
+    },
+    {
+      "source": "/api/archive",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/api/archive/:path*",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     }
   ]
