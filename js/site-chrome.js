@@ -300,6 +300,7 @@
         { href: 'about.html', label: 'About' },
         { href: 'index.html#archive', label: 'Archive' },
         { href: 'videos.html', label: 'Videos' },
+        { href: '/tv', label: 'OMNI TV' },
         { href: 'video-contracts.html', label: 'Contracts' },
         { href: 'posts.html', label: 'Posts' },
         {
